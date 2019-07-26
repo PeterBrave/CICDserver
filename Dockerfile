@@ -6,7 +6,7 @@ RUN yum update -y \
 && yum install -y java \
 && yum install httpd -y \
 && yum install -y tomcat \
-&& yum install tomcat-webapps tomcat-admin-webapps \
+&& yum install tomcat-webapps tomcat-admin-webapps 
 
 COPY /target/*.war  /usr/share/tomcat/webapps/
 CMD ["sh" "-c" "systemctl start tomcat"]
