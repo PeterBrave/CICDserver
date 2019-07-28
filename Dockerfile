@@ -7,9 +7,10 @@ RUN yum update -y \
 && yum install -y tomcat\
 && yum install -y tomcat-webapps tomcat-admin-webapps \
 && systemctl enable tomcat \
-&& yum install -y wget
+&& yum install -y wget \
 && wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm \
 && rpm -ivh mysql-community-release-el7-5.noarch.rpm \
 && yum install -y mysql-server \
 && systemctl enable mysqld.service 
+
 COPY /target/*.war  /usr/share/tomcat/webapps/
