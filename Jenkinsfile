@@ -10,7 +10,7 @@ pipeline {
     
         stage('Junit') {
             steps {
-                sh 'mvn test'
+                junit allowEmptyResults: true, keepLongStdio: true, testResults: 'target/surefire-reports/*.xml'  //Junit插件收集单元测试结果
             }
         }
         
