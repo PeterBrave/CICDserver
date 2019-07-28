@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('单元测试') {
             steps {
-            sh 'mvn clean test'
+            sh 'mvn test'
             }
 }
         
