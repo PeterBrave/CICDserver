@@ -19,7 +19,7 @@ node('zxp_node3'){
         sh 'mvn package';
         //sh 'mvn -version'
         sh 'java -version'         
-        sh 'cp target/*.war /home/jenkins/'
+        //sh 'cp target/*.war /home/jenkins/'
     }
     
     stage('Scan') {
