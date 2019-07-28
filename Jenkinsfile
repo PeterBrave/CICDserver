@@ -4,7 +4,8 @@ pipeline {
     stages {
         stage('单元测试') {
             steps {
-            junit 'target/surefire-reports/*.xml'
+            sh "mvn clean install"   //Maven构建操作
+            junit allowEmptyResults: true, keepLongStdio: true, testResults: 'target/surefire-reports/*.xml'
             }
 }
         
