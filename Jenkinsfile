@@ -6,6 +6,7 @@ pipeline {
             steps {
             sh "mvn test"
             junit allowEmptyResults: true, keepLongStdio: true, testResults: 'target/surefire-reports/*.xml'
+                ///
             }
 }
         
