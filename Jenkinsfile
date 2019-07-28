@@ -10,14 +10,9 @@ pipeline {
     
         stage('单元测试') {
             steps {
-            sh 'mvn test'
+            sh 'mvn clean test'
             }
 }
         
-    }
-    post {
-        always {
-            junit 'build/reports/**/*.xml'
-        }
     }
 }
