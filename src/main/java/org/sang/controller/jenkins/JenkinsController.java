@@ -1,7 +1,6 @@
 package org.sang.controller.jenkins;
 
 import com.offbytwo.jenkins.JenkinsServer;
-import com.offbytwo.jenkins.client.JenkinsHttpClient;
 import com.offbytwo.jenkins.model.*;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -12,12 +11,7 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,24 +27,24 @@ public class JenkinsController {
     @Autowired
     private Configuration freemarkerConfiguration;
 
-    @GetMapping("/test")
-    public String jenkinsAPI() throws IOException, URISyntaxException {
-        try {
-//            Map<String, Job> jobs = jenkinsServer.getJobs();
-//            JobWithDetails job = jenkinsServer.getJob("single");
+//    @GetMapping("/test")
+//    public String jenkinsAPI() throws IOException, URISyntaxException {
+//        try {
+////            Map<String, Job> jobs = jenkinsServer.getJobs();
+////            JobWithDetails job = jenkinsServer.getJob("single");
+////
+////            Build build = job.getFirstBuild();  /*获取某任务第一次构建的构建对象*/
+////            BuildWithDetails buildWithDetails = build.details(); /*子类转型*/
+////            String logs = buildWithDetails.getConsoleOutputText(); /*获取构建的控制台输出信息 ，即构建日志*/
+//            String logs = jenkinsServer.getJobXml("ttt");
 //
-//            Build build = job.getFirstBuild();  /*获取某任务第一次构建的构建对象*/
-//            BuildWithDetails buildWithDetails = build.details(); /*子类转型*/
-//            String logs = buildWithDetails.getConsoleOutputText(); /*获取构建的控制台输出信息 ，即构建日志*/
-            String logs = jenkinsServer.getJobXml("ttt");
-
-            return logs;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "error";
-
-    }
+//            return logs;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return "error";
+//
+//    }
 
     @PostMapping("/build")
     public RespBean buildProject(@RequestParam(value = "jobName") String jobName) throws IOException{
@@ -99,8 +93,5 @@ public class JenkinsController {
         }
 
     }
-
-
-
 
 }
