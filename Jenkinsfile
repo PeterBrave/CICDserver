@@ -1,5 +1,4 @@
-node('zxp_node3'){
-//node('zxp_slave'){
+node('build_node_2'){
 
     /*stage('Environment'){
 		sh 'echo "FROM jenkins/ssh-slave \n RUN apt-get update && apt-get install -y sudo && apt-get install -y maven " > Dockerfile'
@@ -16,8 +15,8 @@ node('zxp_node3'){
      }
         
     stage('Build') {         
-        sh 'mvn package'
-	//sh 'mvn war:war'
+        //sh 'mvn package'
+	sh 'mvn war:war'
         //sh 'mvn -version'
         sh 'java -version'         
         //sh 'cp target/*.war /home/jenkins/'
@@ -44,7 +43,7 @@ node('zxp_node3'){
     }*/
 }
 
-node('zxp_node3'){ 
+node('build_docker_node'){ 
     stage('Build Docker'){
         echo 'build docker'
         /*构建镜像*/
@@ -56,14 +55,14 @@ node('zxp_node3'){
     }
 }
 
-node('zxp_node2'){
+node('deploy_node'){
     stage('Deploy'){
         echo 'Deploy'
         //sh 'mkdir /usr/share/tomcat'
         sh 'docker pull zxpwin/zxp_test_docker_1'
-        sh 'docker run --privileged=true -itd -p 8082:8082 zxpwin/zxp_test_docker_1:latest /usr/sbin/init bash'
-        sh '/bin/bash'
-	sh 'java -jar /usr/share/tomcat/webapps/*.jar &'
+        sh 'docker run --privileged=true -itd -p 8080:8080 zxpwin/zxp_test_docker_1:latest /usr/sbin/init bash'
+	sh 'pwd'
+	//sh 'java -jar /home/jenkins/workspace/zxp_test_slave_3/*.jar'
 	//sh 'mysqladmin -uroot password 'newpassword' '
         ///usr/sbin/init -v /var/run/docker.sock:/var/run/docker.sock   -v /usr/share/tomcat:/usr/share/tomcat
         /*sh 'systemctl enable tomcat'
