@@ -16,7 +16,8 @@ node('zxp_node3'){
      }
         
     stage('Build') {         
-        sh 'mvn package';
+        //sh 'mvn package'
+	sh 'mvn war:war'
         //sh 'mvn -version'
         sh 'java -version'         
         //sh 'cp target/*.war /home/jenkins/'
