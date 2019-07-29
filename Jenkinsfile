@@ -7,7 +7,7 @@ node('build_node'){
 		sh 'docker run --privileged=true -itd  environment:latest /bin/bash'
 	}*/
         
-     stage('Pull from git'){
+     stage('Clone'){
         /*拉取代码*/
         checkout ([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [],
 		submoduleCfg: [], userRemoteConfigs: [[credentialsId:  '96ce8238-69cc-4acf-b2e9-ae6bb3818112', 
