@@ -13,5 +13,5 @@ RUN yum update -y \
 && yum install -y mysql-server \
 && systemctl enable mysqld.service 
 
-COPY /target/*.jar  /usr/share/tomcat/webapps/
-COPY /target/*.jar /
+#COPY /target/*.jar  /usr/share/tomcat/webapps/
+COPY /target/*.jar /root/
