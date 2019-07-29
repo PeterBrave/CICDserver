@@ -1,4 +1,3 @@
-//node('zxp_node3'){
 node('build_node'){
 
     /*stage('Environment'){
@@ -44,7 +43,7 @@ node('build_node'){
     }
 }
 
-node('zxp_node3'){ 
+node('build_docker_node'){ 
     stage('Build Docker'){
         echo 'build docker'
         /*构建镜像*/
