@@ -60,7 +60,7 @@ node('zxp_node2'){
         echo 'Deploy'
         //sh 'mkdir /usr/share/tomcat'
         sh 'docker pull zxpwin/zxp_test_docker_1'
-        sh 'docker run --privileged=true -itd -p 8080:8080 zxpwin/zxp_test_docker_1:latest /usr/sbin/init bash'
+        sh 'docker run --privileged=true -itd -p 8082:8082 zxpwin/zxp_test_docker_1:latest /usr/sbin/init bash'
         sh '/bin/bash'
 	//sh 'mysqladmin -uroot password 'newpassword' '
         ///usr/sbin/init -v /var/run/docker.sock:/var/run/docker.sock   -v /usr/share/tomcat:/usr/share/tomcat
