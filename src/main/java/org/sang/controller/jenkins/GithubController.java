@@ -86,9 +86,9 @@ public class GithubController {
                 code = response.getStatusLine().getStatusCode();
 //                System.out.println("code = " + code);
                 if (code == 200) {
-                    return RespBean.ok("成功更新Jenkinsfile数据");
+                    return RespBean.ok("JenkinsFile Updated Successfully");
                 } else {
-                    return RespBean.error("更新失败");
+                    return RespBean.error("Update Failed");
                 }
 
             } else if (code == 404) {
@@ -100,17 +100,17 @@ public class GithubController {
                 code = response.getStatusLine().getStatusCode();
 //                log.info("code = " + code);
                 if (code == 201) {
-                    RespBean.ok("成功添加JenkinsFile");
+                    RespBean.ok("Add JenkinsFile Successfully");
                 } else {
-                    RespBean.error("添加JenkinsFile失败");
+                    RespBean.error("Add JenkinsFile Failed");
                 }
             }
             log.info("error code = " + code);
-            return RespBean.error("没有找到文件");
+            return RespBean.error("Cannot Find File");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return RespBean.error("修改文件失败");
+        return RespBean.error("Failed to Modify File");
     }
 
     private HttpResponse getJenkinsFileContent(String repo, String uri) throws IOException{

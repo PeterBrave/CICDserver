@@ -59,10 +59,10 @@ public class JenkinsController {
         try {
             JobWithDetails job = jenkinsServer.getJob(jobName);
             job.build();
-            return RespBean.ok("编译成功");
+            return RespBean.ok("Compile Successfully!");
 
         } catch (Exception e) {
-            return RespBean.error("编译失败");
+            return RespBean.error("Failed to Compile");
         }
     }
 
@@ -79,11 +79,11 @@ public class JenkinsController {
             String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, map);
             log.info(content);
             jenkinsServer.createJob(projectName, content);
-            return RespBean.ok("jenkins任务创建成功");
+            return RespBean.ok("Create Jenkins Job Successfully!");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return RespBean.error("jenkins任务创建失败");
+        return RespBean.error("Failed to Create Jenkins Job!");
     }
 
     @PostMapping("/output")
@@ -95,7 +95,7 @@ public class JenkinsController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return "获取构建结果失败";
+            return "Failed to Get Building Result!";
         }
 
     }

@@ -27,9 +27,9 @@ public class ServerController {
             return result;
         }
         if (serverId == 1) {
-            return "敬请期待";
+            return "Coming Soon!";
         }
-        return "非法输入";
+        return "Illegal Input!";
 
     }
 }
