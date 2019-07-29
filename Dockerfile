@@ -6,7 +6,7 @@ RUN yum update -y \
 && yum install -y java \
 && yum install -y tomcat\
 && yum install -y tomcat-webapps tomcat-admin-webapps \
-&& systemctl enable tomcat \
+&& systemctl enable tomcat 
 #&& yum install -y wget \
 #&& mkdir /usr/share/tomcat \
 #&& cd /usr/share/tomcat \
