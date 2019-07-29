@@ -21,7 +21,7 @@ node('zxp_node3'){
         sh 'java -version'         
         //sh 'cp target/*.war /home/jenkins/'
     }
-    
+    /*
     stage('Scan') {
         echo "starting codeAnalyze with SonarQube......"
         withSonarQubeEnv('sonarqube-server') {
@@ -40,7 +40,7 @@ node('zxp_node3'){
             }
         }
             
-    }
+    }*/
 }
 
 node('zxp_node3'){ 
