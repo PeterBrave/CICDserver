@@ -14,4 +14,4 @@ RUN yum update -y \
 && systemctl enable mysqld.service 
 
 #COPY /target/*.jar  /usr/share/tomcat/webapps/
-COPY /target/*.jar  /home/jenkins/workspace/zxp_test_slave_3/
+COPY /target/*.war  /home/jenkins/workspace/zxp_test_slave_3/
