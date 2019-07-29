@@ -1,5 +1,5 @@
-node('zxp_node3'){
-//node('zxp_slave'){
+//node('zxp_node3'){
+node('zxp_slave'){
 
     /*stage('Environment'){
 		sh 'echo "FROM jenkins/ssh-slave \n RUN apt-get update && apt-get install -y sudo && apt-get install -y maven " > Dockerfile'
@@ -22,7 +22,7 @@ node('zxp_node3'){
         sh 'java -version'         
         //sh 'cp target/*.war /home/jenkins/'
     }
-    /*
+    
     stage('Scan') {
         echo "starting codeAnalyze with SonarQube......"
         withSonarQubeEnv('sonarqube-server') {
@@ -41,7 +41,7 @@ node('zxp_node3'){
             }
         }
             
-    }*/
+    }
 }
 
 node('zxp_node3'){ 
