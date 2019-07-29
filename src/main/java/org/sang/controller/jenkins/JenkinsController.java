@@ -11,6 +11,7 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,24 +28,22 @@ public class JenkinsController {
     @Autowired
     private Configuration freemarkerConfiguration;
 
-//    @GetMapping("/test")
-//    public String jenkinsAPI() throws IOException, URISyntaxException {
-//        try {
-////            Map<String, Job> jobs = jenkinsServer.getJobs();
-////            JobWithDetails job = jenkinsServer.getJob("single");
-////
-////            Build build = job.getFirstBuild();  /*获取某任务第一次构建的构建对象*/
-////            BuildWithDetails buildWithDetails = build.details(); /*子类转型*/
-////            String logs = buildWithDetails.getConsoleOutputText(); /*获取构建的控制台输出信息 ，即构建日志*/
-//            String logs = jenkinsServer.getJobXml("ttt");
+    @PostMapping("/test")
+    public String test() {
+        try {
+//            Map<String, Job> jobs = jenkinsServer.getJobs();
+//            JobWithDetails job = jenkinsServer.getJob("single");
 //
-//            return logs;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return "error";
-//
-//    }
+//            Build build = job.getFirstBuild();  /*获取某任务第一次构建的构建对象*/
+//            BuildWithDetails buildWithDetails = build.details(); /*子类转型*/
+//            String logs = buildWithDetails.getConsoleOutputText(); /*获取构建的控制台输出信息 ，即构建日志*/
+            String logs = jenkinsServer.getJobXml("test2");
+            return logs;
+
+        } catch (Exception e) {
+            return "error";
+        }
+    }
 
     @PostMapping("/build")
     public RespBean buildProject(@RequestParam(value = "jobName") String jobName) throws IOException{
