@@ -10,7 +10,21 @@ RUN yum update -y \
 && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz \
 && tar -zxf apache-tomcat-8.5.43.tar.gz \
 && touch /usr/lib/systemd/system/tomcat.service \
-&& echo "[Unit] \n Description=Tomcat  After=syslog.target network.target remote-fs.target nss-lookup.target  \n [Service] Type=oneshot ExecStart=/usr/share/tomcat/apache-tomcat-8.5.43/bin/startup.sh ExecStop=/usr/share/tomcat/apache-tomcat-8.5.43/bin/shutdown.sh ExecReload=/bin/kill -s HUP $MAINPID RemainAfterExit=yes [Install] WantedBy=multi-user.target" > /usr/lib/systemd/system/tomcat.service \
+&& cat>/usr/lib/systemd/system/tomcat.service<<EOF
+[Unit]
+Description=Tomcat
+After=syslog.target network.target remote-fs.target nss-lookup.target
+ 
+[Service]
+Type=oneshot
+ExecStart=/usr/share/tomcat/apache-tomcat-8.5.43/bin/startup.sh
+ExecStop=/usr/share/tomcat/apache-tomcat-8.5.43/bin/shutdown.sh
+ExecReload=/bin/kill -s HUP $MAINPID
+RemainAfterExit=yes
+ 
+[Install]
+WantedBy=multi-user.target
+EOF \
 && systemctl enable tomcat
 #&& ./apache-tomcat-8.5.43/bin/startup.sh
 
