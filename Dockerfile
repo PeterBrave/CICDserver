@@ -22,9 +22,9 @@ RUN yum update -y \
 COPY /target/*.war /usr/share/tomcat/webapps/
 
 #RUN java -jar /usr/share/tomcat/webapps/*.jar
-RUN cd / \
-&& cd /usr/share/tomcat/webapps \
-&& unzip *.war
+#RUN cd / \
+#&& cd /usr/share/tomcat/webapps \
+#&& unzip *.war
 
 #COPY /target/*.war /usr/share/tomcat/apache-tomcat-8.5.43/webapps/
 
