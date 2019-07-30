@@ -1,4 +1,4 @@
-node('build_docker_node'){
+node('build_node'){
 
     /*stage('Environment'){
 		sh 'echo "FROM jenkins/ssh-slave \n RUN apt-get update && apt-get install -y sudo && apt-get install -y maven " > Dockerfile'
@@ -43,7 +43,7 @@ node('build_docker_node'){
     }*/
 }
 
-node('build_docker_node'){ 
+node('build_node'){ 
     stage('Build Docker'){
         echo 'build docker'
         /*构建镜像*/
