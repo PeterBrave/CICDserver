@@ -1,4 +1,4 @@
-node('build_node_2'){
+node('build_docker_node'){
 
     /*stage('Environment'){
 		sh 'echo "FROM jenkins/ssh-slave \n RUN apt-get update && apt-get install -y sudo && apt-get install -y maven " > Dockerfile'
@@ -7,7 +7,7 @@ node('build_node_2'){
 		sh 'docker run --privileged=true -itd  environment:latest /bin/bash'
 	}*/
         
-     stage('Pull from git'){
+     stage('Clone'){
         /*拉取代码*/
         checkout ([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [],
 		submoduleCfg: [], userRemoteConfigs: [[credentialsId:  '96ce8238-69cc-4acf-b2e9-ae6bb3818112', 
@@ -15,8 +15,8 @@ node('build_node_2'){
      }
         
     stage('Build') {         
-        //sh 'mvn package'
-	sh 'mvn war:war'
+        sh 'mvn package'
+	//sh 'mvn war:war'
         //sh 'mvn -version'
         sh 'java -version'         
         //sh 'cp target/*.war /home/jenkins/'
@@ -60,8 +60,8 @@ node('deploy_node'){
         echo 'Deploy'
         //sh 'mkdir /usr/share/tomcat'
         sh 'docker pull zxpwin/zxp_test_docker_1'
-        sh 'docker run --privileged=true -itd -p 8080:8080 zxpwin/zxp_test_docker_1:latest /usr/sbin/init bash'
-	sh 'pwd'
+        sh 'docker run --privileged=true -itd -p 8082:8082 zxpwin/zxp_test_docker_1:latest /usr/sbin/init bash'
+	
 	//sh 'java -jar /home/jenkins/workspace/zxp_test_slave_3/*.jar'
 	//sh 'mysqladmin -uroot password 'newpassword' '
         ///usr/sbin/init -v /var/run/docker.sock:/var/run/docker.sock   -v /usr/share/tomcat:/usr/share/tomcat
