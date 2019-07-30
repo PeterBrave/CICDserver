@@ -15,8 +15,8 @@ node('build_docker_node'){
      }
         
     stage('Build') {         
-        sh 'mvn package'
-	//sh 'mvn war:war'
+        //sh 'mvn package'
+	sh 'mvn war:war'
         //sh 'mvn -version'
         sh 'java -version'         
         //sh 'cp target/*.war /home/jenkins/'
