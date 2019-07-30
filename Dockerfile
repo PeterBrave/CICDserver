@@ -6,7 +6,8 @@ RUN yum update -y \
 && yum install -y java \
 && yum install -y tomcat\
 && yum install -y tomcat-webapps tomcat-admin-webapps \
-&& systemctl enable tomcat 
+&& systemctl enable tomcat \
+&& yum install -y unzip
 #&& yum install -y wget \
 #&& mkdir /usr/share/tomcat \
 #&& cd /usr/share/tomcat \
@@ -18,9 +19,11 @@ RUN yum update -y \
 #&& yum install -y mysql-server \
 #&& systemctl enable mysqld.service 
 
-COPY /target/*.jar  /usr/share/tomcat/webapps/
+COPY /target/*.war  /usr/share/tomcat/webapps/
 
-RUN java -jar /usr/share/tomcat/webapps/*.jar
+#RUN java -jar /usr/share/tomcat/webapps/*.jar
+RUN unzip /usr/share/tomcat/webapps/*.war
+
 #COPY /target/*.war /usr/share/tomcat/apache-tomcat-8.5.43/webapps/
 
 #COPY /target/*.war  /home/jenkins/workspace/zxp_test_slave_3/
