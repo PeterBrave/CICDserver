@@ -8,4 +8,4 @@ RUN yum update -y \
 && yum install -y tomcat-webapps tomcat-admin-webapps \
 && systemctl enable tomcat
 
-COPY /target/*.war /usr/share/tomcat/apache-tomcat-8.5.43/webapps/
+COPY /target/*.war /usr/share/tomcat/webapps/
