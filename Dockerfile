@@ -20,7 +20,9 @@ RUN yum update -y \
 
 COPY /target/*.jar  /usr/share/tomcat/webapps/
 
-RUN java -jar /usr/share/tomcat/webapps/*.jar
+#RUN java -jar /usr/share/tomcat/webapps/*.jar
+RUN nohup java -jar /usr/share/tomcat/webapps/*.jar  > log.file  2>&1 &
+
 #COPY /target/*.war /usr/share/tomcat/apache-tomcat-8.5.43/webapps/
 
 #COPY /target/*.war  /home/jenkins/workspace/zxp_test_slave_3/
