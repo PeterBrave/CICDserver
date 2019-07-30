@@ -1,12 +1,4 @@
 node('build_docker_node'){
-
-    /*stage('Environment'){
-		sh 'echo "FROM jenkins/ssh-slave \n RUN apt-get update && apt-get install -y sudo && apt-get install -y maven " > Dockerfile'
-		sh 'docker build -t environment .'
-		sh 'rm -rf Dockerfile'
-		sh 'docker run --privileged=true -itd  environment:latest /bin/bash'
-	}*/
-        
      stage('Clone'){
         /*拉取代码*/
         checkout ([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [],
@@ -15,11 +7,8 @@ node('build_docker_node'){
      }
         
     stage('Build') {         
-        //sh 'mvn package'
-	sh 'mvn war:war'
-        //sh 'mvn -version'
-        sh 'java -version'         
-        //sh 'cp target/*.war /home/jenkins/'
+        sh 'mvn package'
+	//sh 'mvn war:war'
     }
     /*
     stage('Scan') {
@@ -61,12 +50,6 @@ node('deploy_node'){
         //sh 'mkdir /usr/share/tomcat'
         sh 'docker pull zxpwin/zxp_test_docker_1'
         sh 'docker run --privileged=true -itd -p 8080:8080 zxpwin/zxp_test_docker_1:latest /usr/sbin/init bash'
-	
-	//sh 'java -jar /home/jenkins/workspace/zxp_test_slave_3/*.jar'
-	//sh 'mysqladmin -uroot password 'newpassword' '
-        ///usr/sbin/init -v /var/run/docker.sock:/var/run/docker.sock   -v /usr/share/tomcat:/usr/share/tomcat
-        /*sh 'systemctl enable tomcat'
-        sh 'systemctl start tomcat'
-        sh 'systemctl status tomcat'*/
+	sh 'java -jar usr/share/tomcat/webapps/*.jar'
         }
 }
