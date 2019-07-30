@@ -1,4 +1,4 @@
-node('build_node'){
+node('build_docker_node'){
      stage('Clone'){
         /*拉取代码*/
         checkout ([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [],
@@ -32,7 +32,7 @@ node('build_node'){
     }*/
 }
 
-node('build_node'){ 
+node('build_docker_node'){ 
     stage('Build Docker'){
         echo 'build docker'
         /*构建镜像*/
