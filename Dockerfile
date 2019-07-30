@@ -12,8 +12,8 @@ RUN yum update -y \
 && mkdir /usr/share/tomcat \
 && cd /usr/share/tomcat \
 && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz \
-&& tar -zxf apache-tomcat-8.5.43.tar.gz \
-&& ./apache-tomcat-8.5.43/bin/startup.sh
+&& tar -zxf apache-tomcat-8.5.43.tar.gz 
+#&& ./apache-tomcat-8.5.43/bin/startup.sh
 #&& wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm \
 #&& rpm -ivh mysql-community-release-el7-5.noarch.rpm \
 #&& yum install -y mysql-server \
