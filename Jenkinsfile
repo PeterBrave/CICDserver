@@ -60,7 +60,7 @@ node('deploy_node'){
         echo 'Deploy'
         //sh 'mkdir /usr/share/tomcat'
         sh 'docker pull zxpwin/zxp_test_docker_1'
-        sh 'docker run --privileged=true -itd -p 8082:8082 zxpwin/zxp_test_docker_1:latest /usr/sbin/init bash'
+        sh 'docker run --privileged=true -itd -p 8080:8080 zxpwin/zxp_test_docker_1:latest /usr/sbin/init bash'
 	
 	//sh 'java -jar /home/jenkins/workspace/zxp_test_slave_3/*.jar'
 	//sh 'mysqladmin -uroot password 'newpassword' '
