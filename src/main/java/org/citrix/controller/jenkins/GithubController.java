@@ -1,5 +1,8 @@
 package org.citrix.controller.jenkins;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.apache.commons.codec.binary.Base64;
@@ -11,9 +14,13 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.citrix.bean.RespBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author kavin
@@ -23,15 +30,18 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/github")
 public class GithubController {
+    @Autowired
+    private Configuration freemarkerConfiguration;
 
     @PostMapping("/content")
-    public String getContent(@RequestParam(value = "repo") String repo) throws IOException {
-        log.info("/github/content  repo = " + repo);
+    public String getContent(@RequestParam(value = "repo") String repo,
+                             @RequestParam(value = "language") String language) throws IOException, TemplateException {
+        log.info("/github/content  repo = " + repo + "language = " + language);
         try {
             String uri = "https://api.github.com/repos/PeterBrave/" + repo + "/contents/Jenkinsfile";
             HttpResponse response = getJenkinsFileContent(repo, uri);
-//            int code = response.getStatusLine().getStatusCode();
-//            log.info("code = " + code);
+            int code = response.getStatusLine().getStatusCode();
+            log.info("code = " + code);
             String rev = EntityUtils.toString(response.getEntity());
             com.alibaba.fastjson.JSONObject jsonObject = com.alibaba.fastjson.JSONObject.parseObject(rev);
             String r = jsonObject.getString("content");
@@ -41,17 +51,10 @@ public class GithubController {
             String content = new String(b);
             return content;
         } catch (Exception e) {
-            return "\n" +
-                    "pipeline {\n" +
-                    "    agent any\n" +
-                    "\n" +
-                    "    stages {\n" +
-                    "        stage('Build') {\n" +
-                    "            steps {\n" +
-                    "            }\n" +
-                    "        }\n" +
-                    "    }\n" +
-                    "}";
+            e.printStackTrace();
+            Template template = freemarkerConfiguration.getTemplate("pipeline-"+language+".ftl");
+            String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, null);
+            return content;
         }
     }
 
