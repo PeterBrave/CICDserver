@@ -23,7 +23,7 @@ RUN yum update -y \
 && [Install] \
 && WantedBy=multi-user.target \ 
 && EOF \
-&& systemctl enable tomcat
+&& systemctl enable tomcat \
 && ./apache-tomcat-8.5.43/bin/startup.sh
 
 COPY /target/*.war /usr/share/tomcat/apache-tomcat-8.5.43/webapps/
