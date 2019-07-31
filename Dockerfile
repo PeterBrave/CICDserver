@@ -8,8 +8,9 @@ RUN yum update -y \
 && mkdir /usr/share/tomcat \
 && cd /usr/share/tomcat \
 && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz \
-&& tar -zxf apache-tomcat-8.5.43.tar.gz 
+&& tar -zxf apache-tomcat-8.5.43.tar.gz \
+&& /apache-tomcat-8.5.43/bin/catalina.sh run
 
 COPY /target/*.war /usr/share/tomcat/apache-tomcat-8.5.43/webapps/
-CMD ["/usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh", "run"] && ["/usr/sbin/init"]
+CMD ["/usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh", "run"]
 #ENTRYPOINT ["/usr/share/tomcat/apache-tomcat-8.5.43/bin/startup.sh"] catalina
