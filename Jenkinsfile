@@ -44,7 +44,7 @@ node('build_docker_node'){
     stage('Build Docker'){
         echo 'build docker'
 	environment {
-             Dockerhub_ACCESS_KEY_ID     = credentials('dockerhub-secret-kye-id')
+             Dockerhub_ACCESS_KEY_ID     = credentials('dockerhub-secret-key-id')
         }
         /*构建镜像*/
 	sh 'docker build -t cicd_test_docker .'
