@@ -49,7 +49,7 @@ node('build_docker_node'){
     }
 }
 
-node('Deploy_node'){
+node('deploy_node'){
     stage('Deploy'){
         echo 'Deploy'
         sh 'docker pull zxpwin/cicd_test_docker'
