@@ -10,12 +10,12 @@ node('build_docker_node'){
         sh 'mvn package'
 	//sh 'mvn war:war'
     }
-    /*
+    
     stage('Scan') {
         echo "starting codeAnalyze with SonarQube......"
         withSonarQubeEnv('sonarqube-server') {
             //注意这里withSonarQubeEnv()中的参数要与之前SonarQube servers中Name的配置相同
-            sh "mvn sonar:sonar -Dsonar.projectKey=test -Dsonar.host.url=http://52.34.18.46:9000 -Dsonar.login=3f17ab190f4989204cd76e0d8b0211bd8c85659c"            
+            sh "mvn sonar:sonar -Dsonar.projectKey=test1 -Dsonar.host.url=http://52.34.18.46:9000 -Dsonar.login=3f17ab190f4989204cd76e0d8b0211bd8c85659c"            
         }
         script {
             timeout(1) {
@@ -29,29 +29,25 @@ node('build_docker_node'){
             }
         }
             
-    }*/
+    }
 }
 
 node('build_docker_node'){ 
     stage('Build Docker'){
         echo 'build docker'
         /*构建镜像*/
-	sh 'docker build -t zxp_test_docker_1 .'
+	sh 'docker build -t cicd_test_docker .'
         /*推送镜像*/
-        sh 'docker tag zxp_test_docker_1 zxpwin/zxp_test_docker_1'
+        sh 'docker tag cicd_test_docker zxpwin/cicd_test_docker'
         sh 'docker login -u zxpwin -p yNJL4CcAa42yM72'
-        sh 'docker push zxpwin/zxp_test_docker_1'
+        sh 'docker push zxpwin/cicd_test_docker'
     }
 }
 
 node('deploy_node'){
     stage('Deploy'){
         echo 'Deploy'
-        //sh 'mkdir /usr/share/tomcat'
-        sh 'docker pull zxpwin/zxp_test_docker_1'
-	sh 'docker run --privileged=true -itd -p 8080:8080 zxpwin/zxp_test_docker_1:latest /usr/sbin/init'
-	///usr/sbin/init .
-	///usr/sbin/init bash
-	//sh 'java -jar usr/share/tomcat/webapps/*.jar'
+        sh 'docker pull zxpwin/cicd_test_docker'
+	sh 'docker run --privileged=true -itd -p 8080:8080 zxpwin/cicd_test_docker:latest /usr/sbin/init'
         }
 }
