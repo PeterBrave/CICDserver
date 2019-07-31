@@ -47,15 +47,15 @@ node('build_docker_node'){
              Dockerhub_ACCESS_KEY_ID     = credentials('dockerhub-secret-id')
         }
         /*构建镜像*/
-	//sh 'docker build -t cicd_test_docker .'
+	sh 'docker build -t cicd_test_docker .'
         /*推送镜像*/
-        //sh 'docker tag cicd_test_docker zxpwin/cicd_test_docker'   
-	//sh 'docker login --username zxpwin --password=yNJL4CcAa42yM72 '
-	//sh 'docker push zxpwin/cicd_test_docker'
-	docker.withRegistry('https://registry-1.docker.io/v2/', 'dockerhub-secret-id') {
+        sh 'docker tag cicd_test_docker zxpwin/cicd_test_docker'   
+	sh 'docker login --username zxpwin --password=yNJL4CcAa42yM72 '
+	sh 'docker push zxpwin/cicd_test_docker'
+	/*docker.withRegistry('https://registry-1.docker.io/v2/', 'dockerhub-secret-id') {
             app = docker.build("cicd_test_docker", ".")
             app.push()
-        }
+        }*/
     }
 }
 
