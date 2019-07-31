@@ -11,9 +11,10 @@ RUN yum update -y \
 && tar -zxf apache-tomcat-8.5.43.tar.gz \
 && /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start
 
-COPY /target/*.war /usr/share/tomcat/apache-tomcat-8.5.43/webapps/
+COPY /target/*.jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps/
 RUN /usr/share/tomcat/apache-tomcat-8.5.43/bin/startup.sh \ 
 && /usr/share/tomcat/apache-tomcat-8.5.43/bin/shutdown.sh
 
-CMD ["/usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh", "run"] 
+#CMD ["/usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh", "run"] 
+CMD ["java -jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps/*.jar"]
 #ENTRYPOINT ["/usr/share/tomcat/apache-tomcat-8.5.43/bin/startup.sh"] catalina
