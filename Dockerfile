@@ -18,4 +18,4 @@ COPY /target/*.jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps/
 #CMD ["/usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh", "run"] 
 #CMD ["java", "-jar", "/usr/share/tomcat/apache-tomcat-8.5.43/webapps/*.jar"]
 
-ENTRYPOINT ["java", "-jar", "/usr/share/tomcat/apache-tomcat-8.5.43/webapps/*.jar"]
+ENTRYPOINT ["java", "-jar", "/usr/share/tomcat/apache-tomcat-8.5.43/webapps/cicd-0.0.1-Beta.jar"]
