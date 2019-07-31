@@ -52,7 +52,7 @@ node('build_docker_node'){
         //sh 'docker tag cicd_test_docker zxpwin/cicd_test_docker'   
 	//sh 'docker login --username zxpwin --password=yNJL4CcAa42yM72 '
 	//sh 'docker push zxpwin/cicd_test_docker'
-	docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-secret-id') {
+	docker.withRegistry('https://registry-1.docker.io/v2/', 'dockerhub-secret-id') {
             app = docker.build("cicd_test_docker", ".")
             app.push()
         }
