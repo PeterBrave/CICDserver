@@ -50,7 +50,7 @@ node('build_docker_node'){
 	sh 'docker build -t cicd_test_docker .'
         /*推送镜像*/
         sh 'docker tag cicd_test_docker zxpwin/cicd_test_docker'   
-	sh 'docker login --username zxpwin --password $Dockerhub_ACCESS_KEY_ID '
+	sh 'docker login --username zxpwin --password=$Dockerhub_ACCESS_KEY_ID '
 	sh 'docker push zxpwin/cicd_test_docker'
     }
 }
