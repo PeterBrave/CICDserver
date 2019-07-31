@@ -88,7 +88,7 @@ public class GithubController {
                 response = httpclient.execute(httpPut);
                 code = response.getStatusLine().getStatusCode();
 //                System.out.println("code = " + code);
-                if (code == 200) {
+                if (code == 200 || code == 201) {
                     return RespBean.ok("JenkinsFile Updated Successfully");
                 } else {
                     return RespBean.error("Update Failed");
