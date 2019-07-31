@@ -10,6 +10,11 @@ node('build_docker_node'){
         sh 'mvn package'
 	//sh 'mvn war:war'
     }
+	
+    stage('Unit test') {         
+        sh 'mvn package'
+	//sh 'mvn war:war'
+    }
     
     stage('Scan') {
         echo "starting codeAnalyze with SonarQube......"
@@ -44,7 +49,7 @@ node('build_docker_node'){
     }
 }
 
-node('deploy_node'){
+node('Deploy_node'){
     stage('Deploy'){
         echo 'Deploy'
         sh 'docker pull zxpwin/cicd_test_docker'
