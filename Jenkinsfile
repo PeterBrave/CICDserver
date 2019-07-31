@@ -18,9 +18,12 @@ node('build_docker_node'){
     
     stage('Scan') {
         echo "starting codeAnalyze with SonarQube......"
+	environment {
+             Sonar_ACCESS_KEY_ID     = credentials('sonar-secret-key-id')
+       }
         withSonarQubeEnv('sonarqube-server') {
             //注意这里withSonarQubeEnv()中的参数要与之前SonarQube servers中Name的配置相同
-            sh "mvn sonar:sonar -Dsonar.projectKey=test1 -Dsonar.host.url=http://52.34.18.46:9000 -Dsonar.login=3f17ab190f4989204cd76e0d8b0211bd8c85659c"            
+            sh "mvn sonar:sonar -Dsonar.projectKey=test1 -Dsonar.host.url=http://52.34.18.46:9000 -Dsonar.login=$Sonar_ACCESS_KEY_ID "            
         }
         script {
             timeout(1) {
@@ -40,11 +43,14 @@ node('build_docker_node'){
 node('build_docker_node'){ 
     stage('Build Docker'){
         echo 'build docker'
+	environment {
+             Dockerhub_ACCESS_KEY_ID     = credentials('dockerhub-secret-key-id')
+        }
         /*构建镜像*/
 	sh 'docker build -t cicd_test_docker .'
         /*推送镜像*/
         sh 'docker tag cicd_test_docker zxpwin/cicd_test_docker'
-        sh 'docker login -u zxpwin -p yNJL4CcAa42yM72'
+        sh 'docker login -u zxpwin -p $Dockerhub_ACCESS_KEY_ID'
         sh 'docker push zxpwin/cicd_test_docker'
     }
 }
