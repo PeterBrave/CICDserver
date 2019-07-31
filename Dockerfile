@@ -15,5 +15,5 @@ COPY /target/*.war /usr/share/tomcat/apache-tomcat-8.5.43/webapps/
 RUN /usr/share/tomcat/apache-tomcat-8.5.43/bin/startup.sh \ 
 && /usr/share/tomcat/apache-tomcat-8.5.43/bin/shutdown.sh
 
-CMD ["nohup /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh", "run"] && ["/usr/share/tomcat/apache-tomcat-8.5.43/bin/shutdown.sh"]  && [/usr/share/tomcat/apache-tomcat-8.5.43/bin/startup.sh]
+CMD ["/usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh", "run"] 
 #ENTRYPOINT ["/usr/share/tomcat/apache-tomcat-8.5.43/bin/startup.sh"] catalina
