@@ -12,5 +12,5 @@ RUN yum update -y \
 
 COPY /target/*.war /usr/share/tomcat/apache-tomcat-8.5.43/webapps/
 CMD ["/usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh", "run"]
-CMD ["/usr/share/tomcat/apache-tomcat-8.5.43/bin/start.sh", "run"]
+CMD ["/usr/share/tomcat/apache-tomcat-8.5.43/bin/startup.sh", "run"]
 #ENTRYPOINT ["/usr/share/tomcat/apache-tomcat-8.5.43/bin/startup.sh"] catalina
