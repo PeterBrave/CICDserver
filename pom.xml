@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.sang</groupId>
-    <artifactId>hrserver</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <artifactId>cicd</artifactId>
+    <version>0.0.1-Beta</version>
+    <packaging>jar</packaging>
 
     <name>cicd</name>
     <description>Demo project for Spring Boot</description>
