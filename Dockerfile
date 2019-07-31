@@ -17,4 +17,4 @@ RUN /usr/share/tomcat/apache-tomcat-8.5.43/bin/startup.sh \
 
 #CMD ["/usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh", "run"] 
 #CMD ["java", "-jar", "/usr/share/tomcat/apache-tomcat-8.5.43/webapps/*.jar"]
-ENTRYPOINT ["nohup", "java", "jar", "/usr/share/tomcat/apache-tomcat-8.5.43/webapps/*.jar"]
+ENTRYPOINT ["nohup", "java", "-jar", "/usr/share/tomcat/apache-tomcat-8.5.43/webapps/*.jar"]
