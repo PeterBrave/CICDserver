@@ -49,7 +49,7 @@ node('deploy_node'){
         echo 'Deploy'
         //sh 'mkdir /usr/share/tomcat'
         sh 'docker pull zxpwin/zxp_test_docker_1'
-	sh 'docker run --privileged=true -itd -p 8080:8080 zxpwin/zxp_test_docker_1:latest /apache-tomcat-8.5.43/bin/startup.sh'
+	sh 'docker run --privileged=true -itd -p 8080:8080 zxpwin/zxp_test_docker_1:latest /usr/share/tomcat/apache-tomcat-8.5.43/bin/startup.sh'
 	   ///usr/sbin/init .
 	//sh 'java -jar usr/share/tomcat/webapps/*.jar'
         }
