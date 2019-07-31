@@ -16,5 +16,5 @@ RUN /usr/share/tomcat/apache-tomcat-8.5.43/bin/startup.sh \
 && /usr/share/tomcat/apache-tomcat-8.5.43/bin/shutdown.sh
 
 #CMD ["/usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh", "run"] 
-CMD ["java", "-jar", "/usr/share/tomcat/apache-tomcat-8.5.43/webapps/*.jar"]
-#ENTRYPOINT ["java","-jar","/usr/share/tomcat/apache-tomcat-8.5.43/webapps/*.jar"]
+#CMD ["java", "-jar", "/usr/share/tomcat/apache-tomcat-8.5.43/webapps/*.jar"]
+ENTRYPOINT ["java","-jar","/usr/share/tomcat/apache-tomcat-8.5.43/webapps/*.jar"]
