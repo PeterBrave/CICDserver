@@ -76,7 +76,7 @@ public class GithubController {
             b = base64.encode(b);
             String s = new String(b);
 
-            if (code == 200) {
+            if (code == 200 || code == 201) {
                 String rev = EntityUtils.toString(response.getEntity());
                 com.alibaba.fastjson.JSONObject jsonObject = com.alibaba.fastjson.JSONObject.parseObject(rev);
                 String r = jsonObject.getString("sha");
@@ -88,7 +88,7 @@ public class GithubController {
                 response = httpclient.execute(httpPut);
                 code = response.getStatusLine().getStatusCode();
 //                System.out.println("code = " + code);
-                if (code == 200) {
+                if (code == 200 || code == 201) {
                     return RespBean.ok("JenkinsFile Updated Successfully");
                 } else {
                     return RespBean.error("Update Failed");
@@ -102,16 +102,15 @@ public class GithubController {
                 response = httpclient.execute(httpPut);
                 code = response.getStatusLine().getStatusCode();
 //                log.info("code = " + code);
-                if (code == 201) {
-                    RespBean.ok("Add JenkinsFile Successfully");
+                if (code == 201 ) {
+                    return RespBean.ok("Add JenkinsFile Successfully");
                 } else {
-                    RespBean.error("Add JenkinsFile Failed");
+                    return RespBean.error("Add JenkinsFile Failed");
                 }
             }
-            log.info("error code = " + code);
-            return RespBean.error("Cannot Find File");
         } catch (Exception e) {
             e.printStackTrace();
+
         }
         return RespBean.error("Failed to Modify File");
     }
