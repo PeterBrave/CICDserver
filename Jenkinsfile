@@ -1,7 +1,7 @@
 podTemplate(
     containers: [containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, command: 'cat')], 
     volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
-             hostPathVolume(hostPath: '/var/jenkins/', mountPath: '/var/jenkins')，
+             hostPathVolume(hostPath: '/var/jenkins/', mountPath: '/var/jenkins'),
              hostPathVolume(hostPath: '$(which docker)', mountPath: '/bin/docker')]
     //volumes: [hostPathVolume(hostPath: '/var/jenkins/', mountPath: '/var/jenkins')]
 ){
