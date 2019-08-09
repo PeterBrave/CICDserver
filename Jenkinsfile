@@ -10,11 +10,11 @@ podTemplate(
         stage('Build') {
             container('maven') {
                 stage('Clone') {
-                     //checkout ([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [],
-          //submoduleCfg: [], userRemoteConfigs: [[credentialsId:  '96ce8238-69cc-4acf-b2e9-ae6bb3818112',
-          //url: 'https://github.com/PeterBrave/CICDserver.git']]]) 
-                    sh 'docker version'
-                    //sh 'mvn package'
+                     checkout ([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [],
+          submoduleCfg: [], userRemoteConfigs: [[credentialsId:  '96ce8238-69cc-4acf-b2e9-ae6bb3818112',
+          url: 'https://github.com/PeterBrave/CICDserver.git']]]) 
+                    //sh 'docker version'
+                    sh 'mvn package'
                     
                 }
             }
