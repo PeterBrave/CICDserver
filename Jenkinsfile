@@ -1,7 +1,6 @@
 podTemplate(containers: [
-    containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, command: 'cat',
-                     volumes: [hostPathvolume(mountPath: '/var/jenkins/', hostPath: '/data')])
-  ]) {
+    containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, command: 'cat')
+  ], volumes: [hostPathvolume(mountPath: '/var/jenkins/', hostPath: '/data')]) {
 
     node(POD_LABEL) {
         stage('Get a Maven project') {
