@@ -1,10 +1,10 @@
 podTemplate(
     containers: [containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, privileged: true, command: 'cat')], 
-    //volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
-     //        hostPathVolume(hostPath: '/var/jenkins/', mountPath: '/home/jenkins/agent/workspace/'),
-     //         hostPathVolume(hostPath: '/usr/bin/docker', mountPath: '/bin/docker')
-      //       ]
-    volumes: [hostPathVolume(hostPath: '/var/jenkins/', mountPath: '/home/jenkins')]  
+    volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
+             hostPathVolume(hostPath: '/var/jenkins/', mountPath: '/home/jenkins/agent/*'),
+              hostPathVolume(hostPath: '/usr/bin/docker', mountPath: '/bin/docker')
+             ]
+    //volumes: [hostPathVolume(hostPath: '/var/data/', mountPath: '/home/jenkins')]  
 ){
     node(POD_LABEL) {
         stage('Build') {
