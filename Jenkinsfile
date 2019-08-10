@@ -16,15 +16,15 @@ namespace: 'kube-jenkins'){
             }
                   
             stage('Build'){    
-                sh 'mvn package'
+                //sh 'mvn package'
             }
             stage('Build Docker'){
                 /*构建镜像*/
-                sh 'docker build -t cicd_test_docker .'
+                //sh 'docker build -t cicd_test_docker .'
                 /*推送镜像*/
-                sh 'docker tag cicd_test_docker zxpwin/cicd_test_docker_1'
-                sh 'docker login --username zxpwin --password=yNJL4CcAa42yM72 '
-                sh 'docker push zxpwin/cicd_test_docker_1'
+                //sh 'docker tag cicd_test_docker zxpwin/cicd_test_docker_1'
+                //sh 'docker login --username zxpwin --password=yNJL4CcAa42yM72 '
+                //sh 'docker push zxpwin/cicd_test_docker_1'
             }
        }
    
