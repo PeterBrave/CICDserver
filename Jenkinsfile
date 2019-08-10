@@ -1,3 +1,4 @@
+//test1 hope it will work!
 podTemplate(
     containers: [containerTemplate(name: 'maven', image: 'maven-docker-centos', ttyEnabled: true, command: 'cat')], 
     volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
