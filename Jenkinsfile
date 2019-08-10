@@ -32,17 +32,11 @@ namespace: 'kube-jenkins'){
                 //sh 'docker login --username zxpwin --password=yNJL4CcAa42yM72 '
                 //sh 'docker push zxpwin/cicd_test_docker_1'
             }
-       }
-   
-       
-     } 
-    node{
-    stage('Deploy'){
-            sh 'kubectl apply -f k8s.yaml'
+            
+            stage('Deploy'){
+                sh 'kubectl apply -f k8s.yaml'
   
-    }}
+            }
+       }
+   } 
 }
-
-
-
-
