@@ -4,7 +4,7 @@ podTemplate(
       //       hostPathVolume(hostPath: '/data/', mountPath: '${JENKINS_HOME}/'),
         //      hostPathVolume(hostPath: '/usr/bin/docker', mountPath: '/usr/bin/docker')
            //  ]
-    volumes: [hostPathVolume(hostPath: '/var/data/', mountPath: '/home/jenkins/')]  
+    volumes: [hostPathVolume(hostPath: '/var/data/', mountPath: '/home/jenkins/agent/workspace')]  
 ){
     node(POD_LABEL) {
         stage('Build') {
