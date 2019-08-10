@@ -7,22 +7,25 @@ podTemplate(
     //volumes: [hostPathVolume(hostPath: '/var/data/', mountPath: '/home/jenkins/agent/workspace')]  
 ){
     node(POD_LABEL) {
-        stage('Build') {
             container('maven') {
                 stage('Clone') {
                      checkout ([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [],
           submoduleCfg: [], userRemoteConfigs: [[credentialsId:  '96ce8238-69cc-4acf-b2e9-ae6bb3818112',
           url: 'https://github.com/PeterBrave/CICDserver.git']]]) 
+                }
                     //sh 'docker version'
+                stage('Build'){    
                     sh 'mvn package'
+                }
+                stage('Build Docker'){
+                    
                     sh 'docker build -t citirx-cicd .'
                     sh 'docker tag citirx-cicd zxpwin/citirx-cicd'
                     sh 'docker login --username zxpwin --password=yNJL4CcAa42yM72 '
                     sh 'docker push zxpwin/citirx-cicd'
                 }
             }
-        }
-    }
+        } 
 }
 
 
