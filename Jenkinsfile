@@ -1,5 +1,5 @@
 podTemplate(
-    containers: [containerTemplate(name: 'maven', image: 'maven-docker', ttyEnabled: true, command: 'cat')], 
+    containers: [containerTemplate(name: 'maven', image: 'maven-docker-centos', ttyEnabled: true, command: 'cat')], 
     volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
       //       hostPathVolume(hostPath: '/data/', mountPath: '${JENKINS_HOME}/'),
         //      hostPathVolume(hostPath: '/usr/bin/docker', mountPath: '/usr/bin/docker')
