@@ -19,10 +19,12 @@ podTemplate(
                 }
                 stage('Build Docker'){
                     
-                    sh 'docker build -t citirx-cicd .'
-                    sh 'docker tag citirx-cicd zxpwin/citirx-cicd'
+                    /*构建镜像*/
+                    sh 'docker build -t cicd_test_docker .'
+                    /*推送镜像*/
+                    sh 'docker tag cicd_test_docker zxpwin/cicd_test_docker'
                     sh 'docker login --username zxpwin --password=yNJL4CcAa42yM72 '
-                    sh 'docker push zxpwin/citirx-cicd'
+                    sh 'docker push zxpwin/cicd_test_docker'
                 }
             }
         } 
