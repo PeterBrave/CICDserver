@@ -16,7 +16,6 @@ podTemplate(
                     //sh 'docker version'
                     sh 'mvn package'
                     sh 'docker build -t citirx-cicd .'
-                    sh 'docker login '
                     sh 'docker tag citirx-cicd citirx/citirx-cicd'
                     sh 'docker login --username zxpwin --password=yNJL4CcAa42yM72 '
                     sh 'docker push citirx/citirx-cicd'
