@@ -26,7 +26,9 @@ podTemplate(
                 sh 'docker push zxpwin/cicd_test_docker_1'
             }
        }
-
+        stage('Deploy'){
+            sh 'kubectl apply -f k8s.yaml'
+        }
     } 
     
     }
