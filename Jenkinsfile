@@ -5,7 +5,8 @@ podTemplate(
         //      hostPathVolume(hostPath: '/usr/bin/docker', mountPath: '/usr/bin/docker')
            //  ]
     //volumes: [hostPathVolume(hostPath: '/var/data/', mountPath: '/home/jenkins/agent/workspace')]  
- serviceAccount: 'jenkins2'){
+ serviceAccount: 'jenkins2',
+namespace: 'kube-jenkins'){
      node(POD_LABEL) {
         container('maven') {
             stage('Clone') {
