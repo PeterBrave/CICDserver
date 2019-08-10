@@ -30,9 +30,10 @@ namespace: 'kube-jenkins'){
    
        
      } 
+    node{
     stage('Deploy'){
             sh 'kubectl apply -f k8s.yaml'
-        }
+    }}
 }
 
 
