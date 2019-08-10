@@ -35,21 +35,26 @@ public class GithubController {
 
     @PostMapping("/content")
     public String getContent(@RequestParam(value = "repo") String repo,
-                             @RequestParam(value = "language") String language) throws IOException, TemplateException {
+                             @RequestParam(value = "language") String language,
+                             @RequestParam(value = "githubName") String githubName,
+                             @RequestParam(value = "githubToken") String githubToken) throws IOException, TemplateException {
         log.info("/github/content  repo = " + repo + "language = " + language);
         try {
-            String uri = "https://api.github.com/repos/PeterBrave/" + repo + "/contents/Jenkinsfile";
-            HttpResponse response = getJenkinsFileContent(repo, uri);
+            //拼接Base64Token
+            String rawToken = githubName + ":" + githubToken;
+            String middleToken = string2Base64(rawToken);
+            String finalToken = "Basic " + middleToken;
+            log.info("finalToken = " + finalToken);
+
+            String uri = "https://api.github.com/repos/"+ githubName + "/" + repo + "/contents/Jenkinsfile";
+            HttpResponse response = getJenkinsFileContent(repo, uri,finalToken);
             int code = response.getStatusLine().getStatusCode();
             log.info("code = " + code);
             String rev = EntityUtils.toString(response.getEntity());
             com.alibaba.fastjson.JSONObject jsonObject = com.alibaba.fastjson.JSONObject.parseObject(rev);
             String r = jsonObject.getString("content");
             //base64转string
-            Base64 base64 = new Base64();
-            byte[] b = base64.decode(r);
-            String content = new String(b);
-            return content;
+            return base642String(r);
         } catch (Exception e) {
             e.printStackTrace();
             Template template = freemarkerConfiguration.getTemplate("pipeline-"+language+".ftl");
@@ -60,21 +65,27 @@ public class GithubController {
 
     @PostMapping("/commit")
     public RespBean commitFile(@RequestParam(value = "codeContent") String codeContent,
-                               @RequestParam(value = "repo") String repo) {
+                               @RequestParam(value = "repo") String repo,
+                               @RequestParam(value = "githubName") String githubName,
+                               @RequestParam(value = "githubToken") String githubToken) {
         try {
+            //拼接Base64Token
+            String rawToken = githubName + ":" + githubToken;
+            String middleToken = string2Base64(rawToken);
+            String finalToken = "Basic " + middleToken;
+            log.info("finalToken = " + finalToken);
+
+
             HttpClient httpclient = new DefaultHttpClient();
-            String uri = "https://api.github.com/repos/PeterBrave/" + repo + "/contents/Jenkinsfile";
-            HttpResponse response = getJenkinsFileContent(repo, uri);
+            String uri = "https://api.github.com/repos/" + githubName + "/" + repo + "/contents/Jenkinsfile";
+            HttpResponse response = getJenkinsFileContent(repo, uri, finalToken);
             int code = response.getStatusLine().getStatusCode();
             HttpPut httpPut = new HttpPut(uri);
             //添加http头信息
-            httpPut.addHeader("Authorization", "Basic UGV0ZXJCcmF2ZTo2NzAxYmQ3NTgwODBjMGMxZDQ5OGYyOTVmYjQ4MmMzMDUwZDQ0NGQz"); //认证token
+            httpPut.addHeader("Authorization", finalToken); //认证token
             httpPut.addHeader("Content-Type", "application/json");
             //String转Base64
-            byte[] b = codeContent.getBytes();
-            Base64 base64 = new Base64();
-            b = base64.encode(b);
-            String s = new String(b);
+            String s = string2Base64(codeContent);
 
             if (code == 200 || code == 201) {
                 String rev = EntityUtils.toString(response.getEntity());
@@ -115,14 +126,28 @@ public class GithubController {
         return RespBean.error("Failed to Modify File");
     }
 
-    private HttpResponse getJenkinsFileContent(String repo, String uri) throws IOException{
+    private HttpResponse getJenkinsFileContent(String repo, String uri, String token) throws IOException{
         HttpClient httpclient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(uri);
-        httpGet.addHeader("Authorization", "Basic UGV0ZXJCcmF2ZTo2NzAxYmQ3NTgwODBjMGMxZDQ5OGYyOTVmYjQ4MmMzMDUwZDQ0NGQz");
+        httpGet.addHeader("Authorization", token);
         httpGet.addHeader("Content-Type", "application/json");
         HttpResponse response;
         response = httpclient.execute(httpGet);
         return response;
+    }
+
+    private String string2Base64(String s) {
+        byte[] b = s.getBytes();
+        Base64 base64 = new Base64();
+        b = base64.encode(b);
+        return new String(b);
+    }
+
+    private String base642String(String s) {
+        Base64 base64 = new Base64();
+        byte[] b = base64.decode(s);
+        String content = new String(b);
+        return content;
     }
 
 

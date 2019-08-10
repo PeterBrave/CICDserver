@@ -1,6 +1,7 @@
 package org.citrix.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.citrix.bean.RespBean;
 import org.citrix.common.HrUtils;
 import org.citrix.service.HrService;
@@ -31,6 +32,7 @@ import java.io.PrintWriter;
 /**
  * Created by citrix on 2017/12/28.
  */
+@Slf4j
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -104,6 +106,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                                                         Authentication auth) throws IOException {
                         resp.setContentType("application/json;charset=utf-8");
                         RespBean respBean = RespBean.ok("Log In Successfully !", HrUtils.getCurrentHr());
+                        log.info(HrUtils.getCurrentHr().toString());
                         ObjectMapper om = new ObjectMapper();
                         PrintWriter out = resp.getWriter();
                         out.write(om.writeValueAsString(respBean));

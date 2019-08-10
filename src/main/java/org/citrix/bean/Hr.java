@@ -16,7 +16,7 @@ public class Hr implements UserDetails {
     private Long id;
     private String name;
     private String phone;
-    private String telephone;
+    private String email;
     private String address;
     private boolean enabled;
     private String username;
@@ -24,6 +24,8 @@ public class Hr implements UserDetails {
     private String remark;
     private List<Role> roles;
     private String userface;
+    private String githubName;
+    private String githubToken;
     @Override
     public boolean isEnabled() {
         return enabled;
@@ -102,12 +104,12 @@ public class Hr implements UserDetails {
         this.phone = phone;
     }
 
-    public String getTelephone() {
-        return telephone;
+    public String getEmail() {
+        return email;
     }
 
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getAddress() {
@@ -137,5 +139,21 @@ public class Hr implements UserDetails {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getGithubName() {
+        return githubName;
+    }
+
+    public void setGithubName(String githubName) {
+        this.githubName = githubName;
+    }
+
+    public String getGithubToken() {
+        return githubToken;
+    }
+
+    public void setGithubToken(String githubToken) {
+        this.githubToken = githubToken;
     }
 }

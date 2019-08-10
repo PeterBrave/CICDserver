@@ -7,13 +7,15 @@
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="phone" property="phone"/>
-        <result column="telephone" property="telephone"/>
+        <result column="email" property="email"/>
         <result column="address" property="address"/>
         <result column="enabled" property="enabled"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
         <result column="userface" property="userface"/>
         <result column="remark" property="remark"/>
+        <result column="githubName" property="githubName"/>
+        <result column="githubToken" property="githubToken"/>
     </resultMap>
     <resultMap id="lazyLoadRoles" type="org.citrix.bean.Hr" extends="BaseResultMap">
         <collection property="roles" ofType="org.citrix.bean.Role" select="org.citrix.mapper.HrMapper.getRolesByHrId"
@@ -57,8 +59,8 @@
             <if test="phone != null">
                 phone = #{phone,jdbcType=CHAR},
             </if>
-            <if test="telephone != null">
-                telephone = #{telephone,jdbcType=VARCHAR},
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
             </if>
             <if test="address != null">
                 address = #{address,jdbcType=VARCHAR},
@@ -78,6 +80,12 @@
             <if test="remark != null">
                 remark = #{remark,jdbcType=VARCHAR},
             </if>
+          <if test="githubName != null">
+              githubName = #{githubName, jdbcType=VARCHAR},
+          </if>
+          <if test="githubToken != null">
+              githubToken = #{githubToken, jdbcType=VARCHAR},
+          </if>
         </set>
         where id = #{id}
     </update>
