@@ -28,10 +28,11 @@ namespace: 'kube-jenkins'){
             }
        }
    
-        stage('Deploy'){
+       
+     } 
+    stage('Deploy'){
             sh 'kubectl apply -f k8s.yaml'
         }
-     }
 }
 
 
