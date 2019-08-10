@@ -10,7 +10,7 @@ podTemplate(
         stage('Deploy'){
             sh 'kubectl apply -f k8s.yaml'
         }
-    } 
+
     
     }
 
