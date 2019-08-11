@@ -34,7 +34,8 @@ namespace: 'kube-jenkins'){
             }
             
             stage('Deploy'){
-                sh 'kubectl apply -f k8s.yaml'
+                sh 'kubectl create deployment cicd --image=zxpwin/cicd_test_docker_1'
+                sh 
   
             }
        }
