@@ -36,7 +36,7 @@ namespace: 'kube-jenkins'
             
             stage('Deploy'){
                 sh 'kubectl create deployment cicd --image=zxpwin/cicd-test-docker'
-                sh  'kubectl expose deployment cicd --port=8080 --type=NodePort'
+                sh  'kubectl expose deployment cicd --port=8081 --type=NodePort'
   
             }
        }
