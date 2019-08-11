@@ -7,7 +7,7 @@ podTemplate(
            //  ]
     //volumes: [hostPathVolume(hostPath: '/var/data/', mountPath: '/home/jenkins/agent/workspace')]  
 // serviceAccount: 'jenkins2',
-namespace: 'kube-system'
+namespace: 'kube-jenkins'
 ){
      node(POD_LABEL) {
         container('maven') {
