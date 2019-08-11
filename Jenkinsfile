@@ -17,24 +17,24 @@ namespace: 'kube-jenkins'){
             }
                   
             stage('Build'){    
-              //  sh 'mvn package'
+                sh 'mvn package'
             }
             stage('Build Docker'){
                 /*构建镜像*/
-                //sh 'docker build -t cicd_test_docker .'
+                sh 'docker build -t cicd_test_docker .'
                 /*推送镜像*/
-                //sh 'docker tag cicd_test_docker zxpwin/cicd_test_docker_1'
-                 // withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-                 //   sh "docker login -u ${dockerHubUser} -p ${dockerHubPassword}"
-                 //   sh "docker push zxpwin/cicd_test_docker_1"
-                //}
+                sh 'docker tag cicd_test_docker zxpwin/cicd-test-docker'
+                withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+                   sh "docker login -u ${dockerHubUser} -p ${dockerHubPassword}"
+                   sh "docker push zxpwin/cicd-test-docker"
+                }
                 //sh 'docker tag cicd_test_docker zxpwin/cicd_test_docker_1'
                 //sh 'docker login --username zxpwin --password=yNJL4CcAa42yM72 '
                 //sh 'docker push zxpwin/cicd_test_docker_1'
             }
             
             stage('Deploy'){
-                sh 'kubectl create deployment cicd --image=zxpwin/cicd_test_docker_1'
+                sh 'kubectl create deployment cicd --image=zxpwin/cicd-test-docker'
                 sh  'kubectl expose deployment cicd --port=8080 --type=NodePort'
   
             }
