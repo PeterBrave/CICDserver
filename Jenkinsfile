@@ -1,4 +1,4 @@
-//test2
+//test3
 podTemplate(
     containers: [containerTemplate(name: 'maven', image: 'zxpwin/kubectl-centos', ttyEnabled: true, command: 'cat')], 
     volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
