@@ -21,9 +21,9 @@ namespace: 'kube-jenkins'
                sh 'mvn package'
             }
             stage('Build Docker'){
-                /*构建镜像*/
+                /*????????????*/
                 sh 'docker build -t cicd_test_docker .'
-                /*推送镜像*/
+                /*????????????*/
                sh 'docker tag cicd_test_docker zxpwin/cicd-test-docker'
                withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
                    sh "docker login -u ${dockerHubUser} -p ${dockerHubPassword}"
