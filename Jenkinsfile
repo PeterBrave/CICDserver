@@ -1,5 +1,5 @@
 podTemplate(
-    containers: [containerTemplate(name: 'environment', image: 'docker', ttyEnabled: true, command: 'cat')], 
+    containers: [containerTemplate(name: 'environment', image: 'zxpwin/kubectl-centos', ttyEnabled: true, command: 'cat')], 
     volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
 	// serviceAccount: 'jenkins2',
 	namespace: 'kube-jenkins'
@@ -39,16 +39,17 @@ podTemplate(
             }
             stage('Build Docker'){
   
+  	        sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y wget && mkdir /usr/share/tomcat && cd /usr/share/tomcat && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz && tar -zxf apache-tomcat-8.5.43.tar.gz && /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start \n COPY /target/*.war /usr/share/tomcat/apache-tomcat-8.5.43/webapps " > Dockerfile'
+
                 sh 'docker build -t cicd_test_docker .'
 
-               sh 'docker tag cicd_test_docker zxpwin/cicd-test-docker'
-               withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+               	sh 'docker tag cicd_test_docker zxpwin/cicd-test-docker'
+               	withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
                    sh "docker login -u ${dockerHubUser} -p ${dockerHubPassword}"
                    sh "docker push zxpwin/cicd-test-docker"
-               }
-                //sh 'docker tag cicd_test_docker zxpwin/cicd_test_docker_1'
-                //sh 'docker login --username zxpwin --password=yNJL4CcAa42yM72 '
-                //sh 'docker push zxpwin/cicd_test_docker_1'
+               	}
+               	sh 'rm -rf Dockerfile'
+             
             }
             
             stage('Deploy'){
