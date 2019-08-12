@@ -7,23 +7,15 @@ podTemplate(
     node(POD_LABEL) {
     	container('environment') {
         stage("Environment setup"){
-            sh ' cat > Dockerfile << EOF
-                    FROM centos
-                    RUN yum update -y \
-                    && curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.14.0/bin/linux/amd64/kubectl \
-                    && chmod +x kubectl \
-                    && mv kubectl /usr/local/bin/kubectl \
-                    && yum install maven -y \
-                    && yum install wget -y \
-                    && wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo \
-                    && yum -y install docker-ce-18.06.1.ce-3.el
-                    EOF '
+            sh ' echo "FROM centos \n RUN yum update -y && curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.14.0/bin/linux/amd64/kubectl && chmod +x kubectl  mv kubectl /usr/local/bin/kubectl && yum install maven -y && yum install wget -y && wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo && yum -y install docker-ce-18.06.1.ce-3.el" > Dockerfile'
+            
             sh 'docker build -t environment-image .'
             sh 'docker tag environment-image zxpwin/environment-image'
             withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
                 sh "docker login -u ${dockerHubUser} -p ${dockerHubPassword}"
                 sh "docker push zxpwin/environment-image"
             }
+            sh 'rm -rf Dockerfile'
         }
     	}
 	}
