@@ -1,7 +1,7 @@
 //def environment_docker_name = "environment-image"
-//def tag_environment_docker_name = "zxpwin/environment-image"
+def tag_environment_docker_name = "zxpwin/environment-image"
 //environment_docker_name = "environment-image"
-
+def environment_docker_name = 'environment-image'
 podTemplate(
     containers: [containerTemplate(name: 'environment', image: 'zxpwin/kubectl-centos', ttyEnabled: true, command: 'cat')], 
     volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
@@ -10,7 +10,7 @@ podTemplate(
 ){
 	
     node(POD_LABEL) {
-	def environment_docker_name = 'environment-image'
+	
 	
     	container('environment') {
         stage("Environment setup"){
