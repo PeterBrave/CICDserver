@@ -14,7 +14,7 @@ podTemplate(
     node(POD_LABEL) {
     	container('environment') {
         stage("Environment setup"){
-            sh "echo "FROM centos \n RUN yum update -y && curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.14.0/bin/linux/amd64/kubectl && chmod +x kubectl && mv kubectl /usr/local/bin/kubectl && yum install maven -y && yum install wget -y && wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo && yum -y install docker-ce-18.06.1.ce-3.el7" > Dockerfile"
+            sh 'echo "FROM centos \n RUN yum update -y && curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.14.0/bin/linux/amd64/kubectl && chmod +x kubectl && mv kubectl /usr/local/bin/kubectl && yum install maven -y && yum install wget -y && wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo && yum -y install docker-ce-18.06.1.ce-3.el7" > Dockerfile'
 	    sh "echo ${environment_docker_name} "
 	    sh "docker build -t ${environment_docker_name} ."
             sh "docker tag ${environment_docker_name} ${tag_environment_docker_name}"
@@ -46,7 +46,7 @@ podTemplate(
             }
             stage('Build Docker'){
   
-  		sh " echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y wget && mkdir /usr/share/tomcat && cd /usr/share/tomcat && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz && tar -zxf apache-tomcat-8.5.43.tar.gz && /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start \n COPY /target/*.war /usr/share/tomcat/apache-tomcat-8.5.43/webapps " > Dockerfile"
+  		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y wget && mkdir /usr/share/tomcat && cd /usr/share/tomcat && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz && tar -zxf apache-tomcat-8.5.43.tar.gz && /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start \n COPY /target/*.war /usr/share/tomcat/apache-tomcat-8.5.43/webapps " > Dockerfile'
 
                 sh "docker build -t ${deploy_docker_name} ."
 
