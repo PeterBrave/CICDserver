@@ -3,7 +3,7 @@ def environment_docker_name = 'environment-image'            // The name of slav
 def tag_environment_docker_name = "zxpwin/environment-image" //The tag of slave image, zxpwin stands for the name of docker hub
 def deploy_docker_name = "cicd-test-docker"                  // The name of deployment image
 def tag_deploy_docker_name = "zxpwin/cicd-test-docker"     // The tag of  deployment image
-def deploy_project_name = "cicd-service"
+def deploy_project_name = "cicd-service1"
 
 /*Setup the environment of the slave*/
 podTemplate(
