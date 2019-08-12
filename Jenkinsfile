@@ -1,8 +1,8 @@
 //def environment_docker_name = "environment-image"
 //def tag_environment_docker_name = "zxpwin/environment-image"
 //environment_docker_name = "environment-image"
-environment{
-	environment_docker_name = 'environment-image'
+parameters{
+	string(name: 'environment_docker_name', defaultValue: 'environment-image')
 }
 podTemplate(
     containers: [containerTemplate(name: 'environment', image: 'zxpwin/kubectl-centos', ttyEnabled: true, command: 'cat')], 
