@@ -1,15 +1,16 @@
 //def environment_docker_name = "environment-image"
 //def tag_environment_docker_name = "zxpwin/environment-image"
 //environment_docker_name = "environment-image"
-parameters{
-	string(name: 'environment_docker_name', defaultValue: 'environment-image')
-}
+
 podTemplate(
     containers: [containerTemplate(name: 'environment', image: 'zxpwin/kubectl-centos', ttyEnabled: true, command: 'cat')], 
     volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
 	// serviceAccount: 'jenkins2',
 	namespace: 'kube-jenkins'
 ){
+	parameters{
+	string(name: 'environment_docker_name', defaultValue: 'environment-image')
+}
     node(POD_LABEL) {
     	container('environment') {
         stage("Environment setup"){
