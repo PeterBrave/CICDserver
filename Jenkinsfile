@@ -53,6 +53,8 @@ podTemplate(
             }
             
             stage('Deploy'){
+		sh 'kubectl delete service/cicd -n kube-jenkins'
+            	sh 'kubectl delete deployment.apps/cicd -n kube-jenkins'
                 sh 'kubectl create deployment cicd --image=zxpwin/cicd-test-docker'
                 sh  'kubectl expose deployment cicd --port=8082 --type=NodePort'
   
