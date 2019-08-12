@@ -5,6 +5,7 @@ def deploy_docker_name = "cicd_test_docker"                  // The name of depl
 def tag_deploy_docker_name = "zxpwin/deploy_docker_name"     // The tag of  deployment image
 def deploy_project_name = "cicd"
 
+/*Setup the environment of the slave*/
 podTemplate(
     containers: [containerTemplate(name: 'environment', image: 'docker', ttyEnabled: true, command: 'cat')], 
     volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
@@ -27,9 +28,9 @@ podTemplate(
     	}
 	}
 }
-
+/*Start the slave, build and deploy the project*/
 podTemplate(
-    containers: [containerTemplate(name: 'maven', image: '${tag_environment_docker_name}', ttyEnabled: true, command: 'cat')], 
+    containers: [containerTemplate(name: 'maven', image: "${tag_environment_docker_name}", ttyEnabled: true, command: 'cat')], 
     volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
 	namespace: 'kube-jenkins'
 ){
