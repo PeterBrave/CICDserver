@@ -8,8 +8,9 @@ podTemplate(
 	// serviceAccount: 'jenkins2',
 	namespace: 'kube-jenkins'
 ){
-	def environment_docker_name = "environment-image"
-	def tag_environment_docker_name = "zxpwin/environment-image"
+	environment{
+		environment_docker_name = 'environment-image'
+	}
     node(POD_LABEL) {
     	container('environment') {
         stage("Environment setup"){
