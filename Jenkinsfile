@@ -69,7 +69,7 @@ podTemplate(
        		}
         	withSonarQubeEnv('sonarqube-server') {
             	//注意这里withSonarQubeEnv()中的参数要与之前SonarQube servers中Name的配置相同
-            		sh ' mvn sonar:sonar -Dsonar.projectKey=test3 -Dsonar.host.url=http://52.34.18.46:9000 -Dsonar.login= $Sonar_ACCESS_KEY_ID '            
+            		sh ' mvn sonar:sonar -Dsonar.projectKey=cicd_test_2 -Dsonar.host.url=http://52.34.18.46:9000 -Dsonar.login= $Sonar_ACCESS_KEY_ID ' 
         	}
         	script {
             	timeout(1) {
