@@ -55,7 +55,8 @@ podTemplate(
             }
 	    stage('Unit test') { 
 		echo "starting test...."
-        	sh 'mvn test'
+        	sh 'mvn clean '
+		sh 'mvn test'
 		//sh 'mvn war:war'
 	    }
 	   stage('Scan') {
