@@ -22,8 +22,8 @@ podTemplate(
             }
             /*Build project*/
             stage('Build'){    
-               sh "mvn package"
-		sh "cp /home/jenkins/agent/workspace/ /root/data/"
+               //sh "mvn package"
+		sh "cp -r /home/jenkins/agent/workspace/ /root/data/"
             }
 	}
     }
