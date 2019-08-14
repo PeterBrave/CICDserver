@@ -26,7 +26,7 @@ podTemplate(
 		sh "cp -r /home/jenkins/agent/workspace/ /root/data/"
             }
 	    stage('Unit test') {         
-        	//sh 'mvn test'
+        	sh 'mvn test'
 		//sh 'mvn war:war'
 	    }
 	}
@@ -45,6 +45,7 @@ podTemplate(
 		environment {
              		Sonar_ACCESS_KEY_ID     = credentials('sonar-secret-key-id')
        		}
+				   
         	withSonarQubeEnv('sonarqube-server') {
             	//注意这里withSonarQubeEnv()中的参数要与之前SonarQube servers中Name的配置相同
             		sh ' mvn sonar:sonar -Dsonar.projectKey=test3 -Dsonar.host.url=http://52.34.18.46:9000 -Dsonar.login= $Sonar_ACCESS_KEY_ID '            
