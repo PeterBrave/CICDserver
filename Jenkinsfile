@@ -55,8 +55,8 @@ podTemplate(
             }
 	    stage('Unit test') { 
 		echo "starting test...."
-        	sh 'mvn clean '
-		//sh 'mvn test -e -X'
+        	//sh 'mvn clean '
+		sh 'mvn test -e -X'
 		//sh "mvn test -Dtest=GithubControllerTest -e -X"
 		//sh 'mvn war:war'
 	    }
