@@ -1,3 +1,4 @@
+//test
 /*Setting variables*/
 def environment_docker_name = 'environment-image'            // The name of slave image
 def tag_environment_docker_name = "zxpwin/environment-image" //The tag of slave image, zxpwin stands for the name of docker hub
