@@ -54,7 +54,9 @@ podTemplate(
                sh "mvn package"
             }
 	    stage('Unit test') { 
+		echo "starting test...."
 		sh "pwd"
+		sh "ls"
 		sh "cd .."
 		sh ""cd /cicdtest"
         	sh 'mvn test'
