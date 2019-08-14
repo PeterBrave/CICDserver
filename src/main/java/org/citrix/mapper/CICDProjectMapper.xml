@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.citrix.mapper.CICDProjectMapper">
+    <resultMap id="BaseResultMap" type="org.citrix.bean.CICDProject">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="author" property="author"/>
+        <result column="language" property="language"/>
+        <result column="type" property="type"/>
+        <result column="create_time" property="create_time"/>
+        <result column="enabled" property="enabled"/>
+    </resultMap>
+
+    <select id="getCICDProjectByName" resultMap="BaseResultMap">
+        select * from project WHERE `name`=#{name};
+    </select>
+
+    <delete id="deleteCICDProject" parameterType="String">
+        DELETE FROM project where `name`=#{name}
+    </delete>
+
+    <insert id="addCICDProject">
+        INSERT INTO project set `name`=#{name},author=#{author},`language`=#{language},`type`=#{type},create_time=now()
+    </insert>
+
+    <select id="getCICDProjectByAuthor" resultMap="BaseResultMap">
+        select * from project WHERE author=#{author} and enabled=1 order by create_time desc;
+    </select>
+
+    <update id="updateCICDProject" parameterType="org.citrix.bean.CICDProject">
+        update project
+        <set>
+            <if test="name != null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                `type` = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="enabled != null">
+                enabled = #{enabled,jdbcType=BIT},
+            </if>
+            create_time = now(),
+        </set>
+        where id = #{id}
+    </update>
+
+
+
+</mapper>
