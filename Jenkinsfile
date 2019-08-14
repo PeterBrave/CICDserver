@@ -58,7 +58,6 @@ podTemplate(
 		sh "pwd"
 		sh "ls"
 		sh "cd .."
-		sh "cd /cicdtest"
         	sh 'mvn test'
 		//sh 'mvn war:war'
 	    }
