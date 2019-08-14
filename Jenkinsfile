@@ -35,7 +35,7 @@ podTemplate(
 podTemplate(
     containers: [containerTemplate(name: 'sonarscanner', image: "aexea/sonarscanner", ttyEnabled: true, command: 'cat')], 
     //volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
-	volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/root/data/')],
+	volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/opt/code')],
 	namespace: 'kube-jenkins'
 ){
     node(POD_LABEL) {
