@@ -5,6 +5,32 @@ def deploy_docker_name = "cicd-test-docker"                  // The name of depl
 def tag_deploy_docker_name = "zxpwin/cicd-test-docker"     // The tag of  deployment image
 def deploy_project_name = "cicd-service"
 
+/*Setup the environment of the slave*/
+podTemplate(
+    containers: [containerTemplate(name: 'environment', image: 'docker', ttyEnabled: true, command: 'cat')], 
+    volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
+	// serviceAccount: 'jenkins2',
+	namespace: 'kube-jenkins'
+){
+    node(POD_LABEL) {
+    	container('environment') {
+        stage("Environment setup"){
+	    /*Dockerfile*/
+	    sh 'echo "FROM aexea/sonarscanner \n RUN apt-get update -y && apt-get install maven -y" > Dockerfile'
+	    /*Build docker*/
+	    sh "docker build -t ${environment_docker_name} ."
+	    /*Tag image*/
+            sh "docker tag ${environment_docker_name} ${tag_environment_docker_name}"
+	    /*Login the docker hub and push image to the hub*/
+            withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+                sh "docker login -u ${dockerHubUser} -p ${dockerHubPassword}"
+                sh "docker push ${tag_environment_docker_name}"
+            }
+            sh "rm -rf Dockerfile"
+        }
+    	}
+	}
+}
 /*Start the slave, build and deploy the project*/
 podTemplate(
     containers: [containerTemplate(name: 'maven', image: "maven", ttyEnabled: true, command: 'cat')], 
@@ -33,7 +59,7 @@ podTemplate(
     }
 }
 podTemplate(
-    containers: [containerTemplate(name: 'sonarscanner', image: "aexea/sonarscanner", ttyEnabled: true, command: 'cat')], 
+    containers: [containerTemplate(name: 'sonarscanner', image: "${tag_environment_docker_name}", ttyEnabled: true, command: 'cat')], 
     //volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
 	volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/opt/code')],
 	namespace: 'kube-jenkins'
@@ -45,8 +71,6 @@ podTemplate(
 		environment {
              		Sonar_ACCESS_KEY_ID     = credentials('sonar-secret-key-id')
        		}
-		sh "apt-get update -y"
-		sh "apt-get install -y maven"
         	withSonarQubeEnv('sonarqube-server') {
             	//注意这里withSonarQubeEnv()中的参数要与之前SonarQube servers中Name的配置相同
             		sh ' mvn sonar:sonar -Dsonar.projectKey=test3 -Dsonar.host.url=http://52.34.18.46:9000 -Dsonar.login= $Sonar_ACCESS_KEY_ID '            
