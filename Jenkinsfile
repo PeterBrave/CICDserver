@@ -16,7 +16,7 @@ podTemplate(
     	container('environment') {
         stage("Environment setup"){
 	    /*Dockerfile*/
-	    sh 'echo "FROM aexea/sonarscanner \n RUN apt-get update -y && apt-get install maven -y" > Dockerfile'
+	    sh 'echo "FROM aexea/sonarscanner \n RUN apt-get install maven -y" > Dockerfile'
 	    /*Build docker*/
 	    sh "docker build -t ${environment_docker_name} ."
 	    /*Tag image*/
