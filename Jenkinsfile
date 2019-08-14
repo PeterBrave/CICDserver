@@ -55,9 +55,6 @@ podTemplate(
             }
 	    stage('Unit test') { 
 		echo "starting test...."
-		sh "pwd"
-		sh "ls"
-		sh "cd .."
         	sh 'mvn test'
 		//sh 'mvn war:war'
 	    }
