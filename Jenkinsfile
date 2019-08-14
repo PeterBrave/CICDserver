@@ -9,7 +9,7 @@ def deploy_project_name = "cicd-service"
 podTemplate(
     containers: [containerTemplate(name: 'maven', image: "maven", ttyEnabled: true, command: 'cat')], 
     //volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
-	volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/home/jenkins/agent/')],
+	volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/home/jenkins/')],
 	namespace: 'kube-jenkins'
 ){
     node(POD_LABEL) {
