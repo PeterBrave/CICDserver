@@ -53,8 +53,11 @@ podTemplate(
             stage('Build'){    
                sh "mvn package"
             }
-	    stage('Unit test') {         
-        	sh 'mvn test'
+	    stage('Unit test') { 
+		echo "starting test...."
+        	sh 'mvn clean '
+		//sh 'mvn test'
+		sh "mvn test -Dtest=GithubControllerTest"
 		//sh 'mvn war:war'
 	    }
 	   stage('Scan') {
@@ -65,7 +68,7 @@ podTemplate(
        		}
         	withSonarQubeEnv('sonarqube-server') {
             	//注意这里withSonarQubeEnv()中的参数要与之前SonarQube servers中Name的配置相同
-            		sh ' mvn sonar:sonar -Dsonar.projectKey=test3 -Dsonar.host.url=http://52.34.18.46:9000 -Dsonar.login= $Sonar_ACCESS_KEY_ID '            
+            		sh ' mvn sonar:sonar -Dsonar.projectKey=cicd_test_2 -Dsonar.host.url=http://52.34.18.46:9000 -Dsonar.login= $Sonar_ACCESS_KEY_ID ' 
         	}
         	script {
             	timeout(1) {
@@ -83,7 +86,7 @@ podTemplate(
             stage('Build Docker'){
   		/*Dockerfile*/
 		//sh ' echo "FROM tomcat \n COPY /target/*.war /usr/local/tomcat/webapps/ " > Dockerfile'
-  		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y wget && mkdir /usr/share/tomcat && cd /usr/share/tomcat && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz && tar -zxf apache-tomcat-8.5.43.tar.gz && /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start \n COPY /target/*.jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps \nENTRYPOINT ["java", "-jar", "/usr/share/tomcat/apache-tomcat-8.5.43/webapps/cicd-0.0.1-Beta.jar"] " > Dockerfile'
+  		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y wget && mkdir /usr/share/tomcat && cd /usr/share/tomcat && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz && tar -zxf apache-tomcat-8.5.43.tar.gz && /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start \n COPY /target/*.jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps \n ENTRYPOINT ["java", "-jar", "/usr/share/tomcat/apache-tomcat-8.5.43/webapps/cicd-0.0.1-Beta.jar"] " > Dockerfile'
 		/*Build docker*/
                 sh "docker build -t ${deploy_docker_name} ."
   		/*Tag image*/
