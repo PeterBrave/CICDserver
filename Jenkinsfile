@@ -17,7 +17,7 @@ podTemplate(
         stage("Environment setup"){
 	    /*Dockerfile*/
 	   // sh 'echo "FROM aexea/sonarscanner \n RUN apt-get install maven -y" > Dockerfile'
-	sh 'echo "FROM centos \n RUN yum update -y && yum install -y wget && yum install -y unzip && wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip && cd / && cd  && mkdir /home/sonarqube/ && unzip -o sonar-scanner-cli-4.0.0.1744-linux.zip -d /home/sonarqube/" > Dockerfile'
+	sh 'echo "FROM centos \n RUN yum update -y && yum install -y wget && yum install -y unzip  && cd / && cd  && mkdir /home/sonarqube/ && wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip && unzip -o sonar-scanner-cli-4.0.0.1744-linux.zip -d /home/sonarqube/" > Dockerfile'
 		sh "docker build -t ${environment_docker_name} ."
 	    /*Tag image*/
             sh "docker tag ${environment_docker_name} ${tag_environment_docker_name}"
