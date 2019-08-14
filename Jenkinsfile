@@ -62,13 +62,14 @@ podTemplate(
 podTemplate(
     containers: [containerTemplate(name: 'sonarscanner', image: "${tag_environment_docker_name}", ttyEnabled: true, command: 'cat')], 
     //volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
-	volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/opt/code')],
+	volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/root/data')],
 	namespace: 'kube-jenkins'
 ){
     node(POD_LABEL) {
         container('sonarscanner') {
 	    stage('Scan') {
         	echo "starting codeAnalyze with SonarQube......"
+		sh "cp -r root/data/ /home/jenkins/agent/"
 		environment {
              		Sonar_ACCESS_KEY_ID     = credentials('sonar-secret-key-id')
        		}
