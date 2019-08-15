@@ -75,7 +75,9 @@ podTemplate(
 		container("sonarscanner"){
 		 stage('Scan') {
         	echo "starting codeAnalyze with SonarQube......"
+		sh "pwd"
 		sh "cp -r /root/data/ /home/jenkins/agent/"
+		sh "ll"
 		environment {
              		Sonar_ACCESS_KEY_ID     = credentials('sonar-secret-key-id')
        		}
