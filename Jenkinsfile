@@ -55,9 +55,11 @@ podTemplate(
             /*Build project*/
             stage('Build'){    
                sh "mvn package"
-			   sh "cp -r /home/jenkins/agent/workspace/ /root/data/"
             }
-	  
+	  stage('Unit test') { 
+        	sh 'mvn test'
+		sh "cp -r /home/jenkins/agent/workspace/ /root/data/"
+	   }
 	}
     }
 }
@@ -72,16 +74,11 @@ podTemplate(
 ){
     node(POD_LABEL) {
 		container("sonarscanner"){
-		stage('Unit test') { 
-			sh "pwd"
+
+		stage('Scan') {
+        	echo "starting codeAnalyze with SonarQube......"
 			sh "cp -r /root/data/workspace/cicdtest/*  /home/jenkins/agent/workspace/cicdtest/"
 			sh "cp -r /root/data/workspace/cicdtest@tmp/*  /home/jenkins/agent/workspace/cicdtest@tmp/"
-			sh "ls "
-        		sh 'mvn test'
-	   	 }
-		 stage('Scan') {
-        	echo "starting codeAnalyze with SonarQube......"
-		
 		environment {
              		Sonar_ACCESS_KEY_ID     = credentials('sonar-secret-key-id')
        		}
