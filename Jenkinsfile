@@ -1,8 +1,8 @@
 /*Setting variables*/
 def environment_docker_name = 'environment-image'            // The name of slave image
 def tag_environment_docker_name = "zxpwin/environment-image" //The tag of slave image, zxpwin stands for the name of docker hub
-def deploy_docker_name = "cicd-test-docker"                  // The name of deployment image
-def tag_deploy_docker_name = "zxpwin/cicd-test-docker"     // The tag of  deployment image
+def deploy_docker_name = "cicd-test-docker1"                  // The name of deployment image
+def tag_deploy_docker_name = "zxpwin/cicd-test-docker1"     // The tag of  deployment image
 def deploy_project_name = "cicd-service"
 
 /*Setup the environment of the slave*/
@@ -104,9 +104,10 @@ podTemplate(
 		}
         stage('Build Docker'){
   		/*Dockerfile*/
-  		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y wget && mkdir /usr/share/tomcat && cd /usr/share/tomcat && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz && tar -zxf apache-tomcat-8.5.43.tar.gz && /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start \n COPY /target/*.jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps \n ENTRYPOINT java -jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps/cicd-0.0.1-Beta.jar " > Dockerfile'
+  		//sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y wget && mkdir /usr/share/tomcat && cd /usr/share/tomcat && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz && tar -zxf apache-tomcat-8.5.43.tar.gz && /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start \n COPY /target/*.jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps \n ENTRYPOINT java -jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps/cicd-0.0.1-Beta.jar " > Dockerfile'
+		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java \n COPY /target/*.jar /usr/share/ \n ENTRYPOINT java -jar /usr/share/cicd-0.0.1-Beta.jar " > Dockerfile'
 		/*Build docker*/
-        sh "docker build -t ${deploy_docker_name} ."
+        	sh "docker build -t ${deploy_docker_name} ."
   		/*Tag image*/
 		sh "docker tag ${deploy_docker_name} ${tag_deploy_docker_name}"
 		/*Login the docker hub and push image to the hub*/
