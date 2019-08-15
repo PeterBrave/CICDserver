@@ -116,7 +116,8 @@ podTemplate(
 
         stage('Build Docker'){
   		/*Dockerfile*/
-  		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y maven && yum install -y wget && mkdir /usr/share/tomcat && cd /usr/share/tomcat && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz && tar -zxf apache-tomcat-8.5.43.tar.gz && /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start \n COPY /root/data/workspace/cicdtest/target/*.jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps \n ENTRYPOINT java -jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps/cicd-0.0.1-Beta.jar " > Dockerfile'
+		sh "ls /root/data/"
+  		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y maven && yum install -y wget && mkdir /usr/share/tomcat && cd /usr/share/tomcat && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz && tar -zxf apache-tomcat-8.5.43.tar.gz && /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start \n COPY /root/data/workspace/cicdtest/target/cicd-0.0.1-Beta.jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps \n ENTRYPOINT java -jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps/cicd-0.0.1-Beta.jar " > Dockerfile'
 		//sh ' echo "FROM centos \n RUN yum update -y && yum install -y java \n COPY /target/*.jar /usr/share/ \n ENTRYPOINT java -jar /usr/share/cicd-0.0.1-Beta.jar " > Dockerfile'
 		/*Build docker*/
         	sh "docker build -t ${deploy_docker_name} ."
