@@ -57,9 +57,7 @@ podTemplate(
                sh "mvn package"
 			   sh "cp -r /home/jenkins/agent/workspace/ /root/data/"
             }
-	    stage('Unit test') {         
-        	sh 'mvn test'
-	    }
+	  
 	}
     }
 }
@@ -73,13 +71,17 @@ podTemplate(
 ){
     node(POD_LABEL) {
 		container("sonarscanner"){
+		stage('Unit test') { 
+			sh "pwd"
+			sh "cp -r /root/data/workspace/cicdtest/  /home/jenkins/agent/workspace/cicdtest/"
+			sh "cp -r /root/data/workspace/cicdtest@tmp/  /home/jenkins/agent/workspace/cicdtest@tmp/"
+			sh "ls "
+			sh "top"
+        		sh 'mvn test'
+	   	 }
 		 stage('Scan') {
         	echo "starting codeAnalyze with SonarQube......"
-		sh "pwd"
-		sh "cp -r /root/data/workspace/cicdtest/  /home/jenkins/agent/workspace/cicdtest/"
-		sh "cp -r /root/data/workspace/cicdtest@tmp/  /home/jenkins/agent/workspace/cicdtest@tmp/"
-		sh "ls "
-		sh "java -jar /workspace/cicdtest/target/cicd-0.0.1-Beta.jar"
+		
 		environment {
              		Sonar_ACCESS_KEY_ID     = credentials('sonar-secret-key-id')
        		}
