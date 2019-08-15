@@ -73,10 +73,9 @@ podTemplate(
 		container("sonarscanner"){
 		stage('Unit test') { 
 			sh "pwd"
-			sh "cp -r /root/data/workspace/cicdtest/  /home/jenkins/agent/workspace/cicdtest/"
-			sh "cp -r /root/data/workspace/cicdtest@tmp/  /home/jenkins/agent/workspace/cicdtest@tmp/"
+			sh "cp -r /root/data/workspace/cicdtest/*  /home/jenkins/agent/workspace/cicdtest/"
+			sh "cp -r /root/data/workspace/cicdtest@tmp/*  /home/jenkins/agent/workspace/cicdtest@tmp/"
 			sh "ls "
-			sh "top"
         		sh 'mvn test'
 	   	 }
 		 stage('Scan') {
