@@ -99,9 +99,24 @@ podTemplate(
         }
             
 		}
+        }
+    }
+}
+
+podTemplate(
+    containers: [containerTemplate(name: 'deploy', image: "${tag_environment_docker_name}", ttyEnabled: true, command: 'cat')], 
+    //volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
+    volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/root/data'),
+         hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
+    namespace: 'kube-jenkins',
+    nodeSelector: "ip-172-26-14-103.ap-northeast-2.compute.internal"
+){
+    node(POD_LABEL) {
+        container("deploy"){
+
         stage('Build Docker'){
   		/*Dockerfile*/
-  		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y maven && yum install -y wget && mkdir /usr/share/tomcat && cd /usr/share/tomcat && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz && tar -zxf apache-tomcat-8.5.43.tar.gz && /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start \n COPY /target/*.jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps \n ENTRYPOINT java -jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps/cicd-0.0.1-Beta.jar " > Dockerfile'
+  		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y maven && yum install -y wget && mkdir /usr/share/tomcat && cd /usr/share/tomcat && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz && tar -zxf apache-tomcat-8.5.43.tar.gz && /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start \n COPY /root/data/workspace/cicdtest/target/*.jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps \n ENTRYPOINT java -jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps/cicd-0.0.1-Beta.jar " > Dockerfile'
 		//sh ' echo "FROM centos \n RUN yum update -y && yum install -y java \n COPY /target/*.jar /usr/share/ \n ENTRYPOINT java -jar /usr/share/cicd-0.0.1-Beta.jar " > Dockerfile'
 		/*Build docker*/
         	sh "docker build -t ${deploy_docker_name} ."
