@@ -10,13 +10,14 @@ podTemplate(
     containers: [containerTemplate(name: 'environment', image: 'docker', ttyEnabled: true, command: 'cat')], 
     volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
 	// serviceAccount: 'jenkins2',
-	namespace: 'kube-jenkins'
+	namespace: 'kube-jenkins',
+	nodeSelector: "ip-172-26-14-103.ap-northeast-2.compute.internal"
 ){
     node(POD_LABEL) {
     	container('environment') {
         stage("Environment setup"){
 	    /*Dockerfile*/
-        sh 'echo "FROM centos \n RUN yum update -y && curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.14.0/bin/linux/amd64/kubectl && chmod +x kubectl && mv kubectl /usr/local/bin/kubectl && yum install maven -y && yum install wget -y && wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo && yum -y install docker-ce-18.06.1.ce-3.el7 && yum install -y unzip && mkdir /home/sonarqube/ && wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip && unzip -o sonar-scanner-cli-4.0.0.1744-linux.zip -d /home/sonarqube/" > Dockerfile'
+        sh 'echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y maven && curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.14.0/bin/linux/amd64/kubectl && chmod +x kubectl && mv kubectl /usr/local/bin/kubectl && yum install wget -y && wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo && yum -y install docker-ce-18.06.1.ce-3.el7 && yum install -y unzip && mkdir /home/sonarqube/ && wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip && unzip -o sonar-scanner-cli-4.0.0.1744-linux.zip -d /home/sonarqube/" > Dockerfile'
 
             //sh 'echo "FROM centos \n RUN yum update -y && yum install -y wget && yum install -y unzip && yum install -y maven && cd / && cd  && mkdir /home/sonarqube/ && wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip && unzip -o sonar-scanner-cli-4.0.0.1744-linux.zip -d /home/sonarqube/" > Dockerfile'
 
@@ -35,11 +36,13 @@ podTemplate(
     	}
 	}
 }
-/*Start the slave, build and deploy the project*/
+
 podTemplate(
     containers: [containerTemplate(name: 'maven', image: "${tag_environment_docker_name}", ttyEnabled: true, command: 'cat')], 
-    volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
-	namespace: 'kube-jenkins'
+    //volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
+	volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/root/data/')],
+	namespace: 'kube-jenkins',
+	nodeSelector: "ip-172-26-14-103.ap-northeast-2.compute.internal"
 ){
     node(POD_LABEL) {
         container('maven') {
@@ -53,16 +56,29 @@ podTemplate(
             stage('Build'){    
                sh "mvn package"
             }
-	    stage('Unit test') { 
-		echo "starting test...."
-        	//sh 'mvn clean '
-		sh 'mvn test -e -X'
-		//sh "mvn test -Dtest=GithubControllerTest -e -X"
-		//sh 'mvn war:war'
-	    }
-	   stage('Scan') {
+	  stage('Unit test') { 
+        	sh 'mvn test'
+		sh "cp -r /home/jenkins/agent/workspace/ /root/data/"
+	   }
+	}
+    }
+}
+
+podTemplate(
+    containers: [containerTemplate(name: 'sonarscanner', image: "${tag_environment_docker_name}", ttyEnabled: true, command: 'cat')], 
+    //volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
+	volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/root/data'),
+		 hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
+	namespace: 'kube-jenkins',
+	nodeSelector: "ip-172-26-14-103.ap-northeast-2.compute.internal"
+){
+    node(POD_LABEL) {
+		container("sonarscanner"){
+
+		stage('Scan') {
         	echo "starting codeAnalyze with SonarQube......"
-		//sh "cp -r /root/data/ /home/jenkins/agent/"
+			sh "cp -r /root/data/workspace/cicdtest/*  /home/jenkins/agent/workspace/cicdtest/"
+			sh "cp -r /root/data/workspace/cicdtest@tmp/*  /home/jenkins/agent/workspace/cicdtest@tmp/"
 		environment {
              		Sonar_ACCESS_KEY_ID     = credentials('sonar-secret-key-id')
        		}
@@ -82,14 +98,13 @@ podTemplate(
             }
         }
             
-    }
-         stage('Build Docker'){
+		}
+        stage('Build Docker'){
   		/*Dockerfile*/
-		//sh ' echo "FROM tomcat \n COPY /target/*.war /usr/local/tomcat/webapps/ " > Dockerfile'
-  		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y wget && mkdir /usr/share/tomcat && cd /usr/share/tomcat && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz && tar -zxf apache-tomcat-8.5.43.tar.gz && /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start \n COPY /target/*.jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps \n ENTRYPOINT usr/sbin/init" > Dockerfile'
-  		//java -jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps/cicd-0.0.1-Beta.jar 
+  		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y maven && yum install -y wget && mkdir /usr/share/tomcat && cd /usr/share/tomcat && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz && tar -zxf apache-tomcat-8.5.43.tar.gz && /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start \n COPY /target/*.jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps \n ENTRYPOINT java -jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps/cicd-0.0.1-Beta.jar " > Dockerfile'
+		//sh ' echo "FROM centos \n RUN yum update -y && yum install -y java \n COPY /target/*.jar /usr/share/ \n ENTRYPOINT java -jar /usr/share/cicd-0.0.1-Beta.jar " > Dockerfile'
 		/*Build docker*/
-        sh "docker build -t ${deploy_docker_name} ."
+        	sh "docker build -t ${deploy_docker_name} ."
   		/*Tag image*/
 		sh "docker tag ${deploy_docker_name} ${tag_deploy_docker_name}"
 		/*Login the docker hub and push image to the hub*/
@@ -110,5 +125,5 @@ podTemplate(
 		sh "kubectl expose deployment ${deploy_project_name} --port=8082 --type=NodePort"
             }
        }
-   } 
+	}
 }
