@@ -78,7 +78,8 @@ podTemplate(
 		sh "pwd"
 		sh "cp -r /root/data/workspace/cicdtest/  /home/jenkins/agent/workspace/cicdtest/"
 		sh "cp -r /root/data/workspace/cicdtest@tmp/  /home/jenkins/agent/workspace/cicdtest@tmp/"
-		sh "ls"
+		sh "ls "
+		sh "java -jar /workspace/cicdtest/target/cicd-0.0.1-Beta.jar"
 		environment {
              		Sonar_ACCESS_KEY_ID     = credentials('sonar-secret-key-id')
        		}
