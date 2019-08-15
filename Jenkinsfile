@@ -11,6 +11,7 @@ podTemplate(
     volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
 	// serviceAccount: 'jenkins2',
 	namespace: 'kube-jenkins'
+	nodeSelector: "ip-172-26-14-103.ap-northeast-2.compute.internal"
 ){
     node(POD_LABEL) {
     	container('environment') {
@@ -35,11 +36,13 @@ podTemplate(
     	}
 	}
 }
-/*Start the slave, build and deploy the project*/
+
 podTemplate(
-    containers: [containerTemplate(name: 'maven', image: "${tag_environment_docker_name}", ttyEnabled: true, command: 'cat')], 
-    volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
+    containers: [containerTemplate(name: 'maven', image: "maven", ttyEnabled: true, command: 'cat')], 
+    //volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
+	volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/root/data/')],
 	namespace: 'kube-jenkins'
+	nodeSelector: "ip-172-26-14-103.ap-northeast-2.compute.internal"
 ){
     node(POD_LABEL) {
         container('maven') {
@@ -52,17 +55,27 @@ podTemplate(
             /*Build project*/
             stage('Build'){    
                sh "mvn package"
+			   sh "cp -r /home/jenkins/agent/workspace/ /root/data/"
             }
-	    stage('Unit test') { 
-		echo "starting test...."
-        	//sh 'mvn clean '
-		sh 'mvn test -e -X'
-		//sh "mvn test -Dtest=GithubControllerTest -e -X"
-		//sh 'mvn war:war'
+	    stage('Unit test') {         
+        	sh 'mvn test'
 	    }
-	   stage('Scan') {
+	}
+    }
+}
+
+podTemplate(
+    containers: [containerTemplate(name: 'sonarscanner', image: "${tag_environment_docker_name}", ttyEnabled: true, command: 'cat')], 
+    //volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
+	volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/root/data')],
+	namespace: 'kube-jenkins'
+	nodeSelector: "ip-172-26-14-103.ap-northeast-2.compute.internal"
+){
+    node(POD_LABEL) {
+		container("sonarscanner"){
+		 stage('Scan') {
         	echo "starting codeAnalyze with SonarQube......"
-		//sh "cp -r /root/data/ /home/jenkins/agent/"
+		sh "cp -r /root/data/ /home/jenkins/agent/"
 		environment {
              		Sonar_ACCESS_KEY_ID     = credentials('sonar-secret-key-id')
        		}
@@ -82,13 +95,12 @@ podTemplate(
             }
         }
             
-    }
-            stage('Build Docker'){
+		}
+        stage('Build Docker'){
   		/*Dockerfile*/
-		//sh ' echo "FROM tomcat \n COPY /target/*.war /usr/local/tomcat/webapps/ " > Dockerfile'
   		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y wget && mkdir /usr/share/tomcat && cd /usr/share/tomcat && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz && tar -zxf apache-tomcat-8.5.43.tar.gz && /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start \n COPY /target/*.jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps \n ENTRYPOINT java -jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps/cicd-0.0.1-Beta.jar " > Dockerfile'
 		/*Build docker*/
-                sh "docker build -t ${deploy_docker_name} ."
+        sh "docker build -t ${deploy_docker_name} ."
   		/*Tag image*/
 		sh "docker tag ${deploy_docker_name} ${tag_deploy_docker_name}"
 		/*Login the docker hub and push image to the hub*/
@@ -109,5 +121,5 @@ podTemplate(
 		sh "kubectl expose deployment ${deploy_project_name} --port=8082 --type=NodePort"
             }
        }
-   } 
+	}
 }
