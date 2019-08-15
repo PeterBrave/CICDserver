@@ -76,7 +76,8 @@ podTemplate(
 		 stage('Scan') {
         	echo "starting codeAnalyze with SonarQube......"
 		sh "pwd"
-		sh "cp -r /root/data/ /home/jenkins/agent/"
+		sh "cp -r /root/data/workspace/cicdtest/  /home/jenkins/agent/workspace/cicdtest/"
+		sh "cp -r /root/data/workspace/cicdtest@tmp/  /home/jenkins/agent/workspace/cicdtest@tmp/"
 		sh "ls"
 		environment {
              		Sonar_ACCESS_KEY_ID     = credentials('sonar-secret-key-id')
