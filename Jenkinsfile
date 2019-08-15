@@ -65,7 +65,8 @@ podTemplate(
 podTemplate(
     containers: [containerTemplate(name: 'sonarscanner', image: "${tag_environment_docker_name}", ttyEnabled: true, command: 'cat')], 
     //volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
-	volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/root/data')],
+	volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/root/data'),
+		 hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
 	namespace: 'kube-jenkins',
 	nodeSelector: "ip-172-26-14-103.ap-northeast-2.compute.internal"
 ){
