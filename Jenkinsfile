@@ -104,7 +104,7 @@ podTemplate(
 }
 
 podTemplate(
-    containers: [containerTemplate(name: 'deploy', image: "${tag_environment_docker_name}", ttyEnabled: true, command: 'cat')], 
+    containers: [containerTemplate(name: 'deploy', image: "${tag_environment_docker_name}", ttyEnabled: true, privileged: true command: 'cat')], 
     //volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
     volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/root/data'),
          hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
@@ -118,7 +118,7 @@ podTemplate(
   		/*Dockerfile*/
 		sh "cp -r /root/data/workspace/cicdtest/*  /home/jenkins/agent/workspace/cicdtest/"
 		//sh ' echo "FROM centos \n RUN yum update -y && yum install -y java \n COPY /target/*.jar /usr/share/ \n ENTRYPOINT java -jar /usr/share/cicd-0.0.1-Beta.jar " > Dockerfile'
-		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y tomcat && systemctl enable tomcat \n COPY /target/*.war /usr/share/tomcat/webapps/ \n ENTRYPOINT /usr/sbin/init" > Dockerfile'
+		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y tomcat && rm -rf server.xml && cd / && cd usr/share/tomcat/conf && wget https://raw.githubusercontent.com/PeterBrave/CICDserver/master/server.xml && systemctl enable tomcat \n COPY /target/*.war /usr/share/tomcat/webapps/ \n ENTRYPOINT /usr/sbin/init" > Dockerfile'
 		/*Build docker*/
         	sh "docker build -t ${deploy_docker_name} ."
   		/*Tag image*/
