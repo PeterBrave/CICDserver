@@ -120,7 +120,8 @@ podTemplate(
   		/*Dockerfile*/
 
 		sh "cp -r /root/data/workspace/$JOB_NAME/*  /home/jenkins/agent/workspace/$JOB_NAME/"
-		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y wget &&  yum install -y tomcat && cd / && cd usr/share/tomcat/conf/ &&  rm -rf server.xml && wget https://raw.githubusercontent.com/PeterBrave/CICDserver/master/server.xml  && systemctl enable tomcat \n COPY /target/*.war /usr/share/tomcat/webapps/ \n ENTRYPOINT /usr/sbin/init" > Dockerfile'		/*Build docker*/
+		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y wget &&  yum install -y tomcat && cd / && cd usr/share/tomcat/conf/ &&  rm -rf server.xml && wget https://raw.githubusercontent.com/PeterBrave/CICDserver/master/server.xml  && systemctl enable tomcat \n COPY /target/*.war /usr/share/tomcat/webapps/ \n ENTRYPOINT /usr/sbin/init" > Dockerfile'		
+		/*Build docker*/
         	sh "docker build -t ${deploy_docker_name} ."
   		/*Tag image*/
 		sh "docker tag ${deploy_docker_name} ${tag_deploy_docker_name}"
