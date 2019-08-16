@@ -49,7 +49,8 @@ public class projectController {
         return RespBean.ok("success", null);
     }
     @PostMapping("/update")
-    public RespBean updateProject(@RequestParam("name") String name, @RequestParam("type") int type,
+    public RespBean updateProject(@RequestParam("name") String name,
+                                  @RequestParam("type") int type,
                                   @RequestParam("enable") boolean enable) {
         CICDProject project = cicdProjectMapper.getCICDProjectByName(name);
         if (type != 0) {

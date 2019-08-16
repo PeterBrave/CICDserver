@@ -23,7 +23,7 @@ public class ServerController {
         String commandStr = bashContent;
 
         if (serverId == 2) {
-            String result = ConnectLinuxCommandUtils.connectLinux("3.15.149.72", "root", "1114981272", commandStr);
+            String result = ConnectLinuxCommandUtils.connectLinux("18.217.25.160", "root", "zxcvfdsa321", commandStr);
             return result;
         }
         if (serverId == 1) {
