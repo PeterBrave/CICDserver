@@ -45,8 +45,6 @@ public class UserController {
         } catch (Exception e) {
             return RespBean.error("update error");
         }
-
-
         return RespBean.ok("success", HrUtils.getCurrentHr());
     }
 }

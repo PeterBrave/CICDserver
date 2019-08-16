@@ -48,4 +48,3 @@ public class JenkinsConfiguration {
         return new JenkinsServer(jenkinsHttpClient);
     }
 }
-

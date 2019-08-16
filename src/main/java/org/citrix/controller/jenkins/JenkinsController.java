@@ -36,7 +36,7 @@ public class JenkinsController {
 //            Build build = job.getFirstBuild();  /*获取某任务第一次构建的构建对象*/
 //            BuildWithDetails buildWithDetails = build.details(); /*子类转型*/
 //            String logs = buildWithDetails.getConsoleOutputText(); /*获取构建的控制台输出信息 ，即构建日志*/
-            String logs = jenkinsServer.getJobXml("test2");
+            String logs = jenkinsServer.getJobXml("cicdtest");
             return logs;
 
         } catch (Exception e) {
@@ -61,12 +61,14 @@ public class JenkinsController {
     @PostMapping("/create")
     public RespBean createJob(@RequestParam(value = "projectName") String projectName,
                               @RequestParam(value = "description") String description,
-                              @RequestParam(value = "repo") String repo) throws Exception {
+                              @RequestParam(value = "repo") String repo,
+                              @RequestParam(value = "githubName") String githubName) throws Exception {
         log.info("projectName = " + projectName + ", description = " + description + ",repo =" + repo);
         try {
             Map<String, Object> map = new HashMap<>();
             map.put("description", description);
             map.put("repo", repo);
+            map.put("githubName", githubName);
             Template template = freemarkerConfiguration.getTemplate("jenkins-config.ftl");
             String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, map);
             log.info(content);

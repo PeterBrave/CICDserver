@@ -11,6 +11,7 @@ public class GithubControllerTest {
 
     @Test
     public void getContent() {
+
         Assert.assertEquals("success", "aaa", "aaa");
     }
 }
