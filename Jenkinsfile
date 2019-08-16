@@ -58,7 +58,7 @@ podTemplate(
             }
 	  stage('Unit test') { 
         	sh 'mvn test'
-		sh "cp -r /home/jenkins/agent/workspace/ /root/data/"
+		sh "cp -r /home/jenkins/agent/* /root/data/"
 	   }
 	}
     }
@@ -77,8 +77,8 @@ podTemplate(
 
 		stage('Scan') {
         	echo "starting codeAnalyze with SonarQube......"
-			sh "cp -r /root/data/workspace/cicdtest/*  /home/jenkins/agent/workspace/cicdtest/"
-			sh "cp -r /root/data/workspace/cicdtest@tmp/*  /home/jenkins/agent/workspace/cicdtest@tmp/"
+			sh "cp -r /root/data/workspace/$JOB_NAME/*  /home/jenkins/agent/workspace/$JOB_NAME/"
+			//sh "cp -r /root/data/workspace/$JOB_NAME/*  /home/jenkins/agent/workspace/$JOB_NAME/"
 		environment {
              		Sonar_ACCESS_KEY_ID     = credentials('sonar-secret-key-id')
        		}
@@ -116,13 +116,9 @@ podTemplate(
 
         stage('Build Docker'){
   		/*Dockerfile*/
-		sh "ls /root/data/"
-		sh "cp -r /root/data/workspace/cicdtest/*  /home/jenkins/agent/workspace/cicdtest/"
-		sh "ls /home/jenkins/agent/workspace/cicdtest/"
-		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java \n COPY /target/*.jar /usr/share/ \n ENTRYPOINT java -jar /usr/share/cicd-0.0.1-Beta.jar " > Dockerfile'
-  		//sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y maven && yum install -y wget && mkdir /usr/share/tomcat && cd /usr/share/tomcat && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz && tar -zxf apache-tomcat-8.5.43.tar.gz && /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start \n COPY /root/data/workspace/cicdtest/target/cicd-0.0.1-Beta.jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps \n ENTRYPOINT java -jar /usr/share/tomcat/apache-tomcat-8.5.43/webapps/cicd-0.0.1-Beta.jar " > Dockerfile'
-		//sh ' echo "FROM centos \n RUN yum update -y && yum install -y java \n COPY /target/*.jar /usr/share/ \n ENTRYPOINT java -jar /usr/share/cicd-0.0.1-Beta.jar " > Dockerfile'
-		/*Build docker*/
+
+		sh "cp -r /root/data/workspace/$JOB_NAME/*  /home/jenkins/agent/workspace/$JOB_NAME/"
+		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y wget &&  yum install -y tomcat && cd / && cd usr/share/tomcat/conf/ &&  rm -rf server.xml && wget https://raw.githubusercontent.com/PeterBrave/CICDserver/master/server.xml  && systemctl enable tomcat \n COPY /target/*.war /usr/share/tomcat/webapps/ \n ENTRYPOINT /usr/sbin/init" > Dockerfile'		/*Build docker*/
         	sh "docker build -t ${deploy_docker_name} ."
   		/*Tag image*/
 		sh "docker tag ${deploy_docker_name} ${tag_deploy_docker_name}"
