@@ -1,3 +1,4 @@
+/*--------------Perform different tasks by three pods------------------*/
 /*Setting variables*/
 def environment_docker_name = 'environment-image'            // The name of slave image
 def tag_environment_docker_name = "zxpwin/environment-image" //The tag of slave image, zxpwin stands for the name of docker hub
@@ -54,7 +55,8 @@ podTemplate(
 	}
 	}
             /*Build project*/
-            stage('Build'){    
+            stage('Build'){
+		//copy  front-end code
                sh "mvn package"
             }
 	  stage('Unit test') { 
