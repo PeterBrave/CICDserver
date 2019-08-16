@@ -104,7 +104,7 @@ podTemplate(
 }
 
 podTemplate(
-    containers: [containerTemplate(name: 'deploy', image: "${tag_environment_docker_name}", ttyEnabled: true, privileged: true command: 'cat')], 
+    containers: [containerTemplate(name: 'deploy', image: "${tag_environment_docker_name}", ttyEnabled: true, privileged: true, command: 'cat')], 
     //volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
     volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/root/data'),
          hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
