@@ -58,7 +58,7 @@ podTemplate(
             }
 	  stage('Unit test') { 
         	sh 'mvn test'
-		sh "cp -r /home/jenkins/agent/workspace/* /root/data/"
+		sh "cp -r /home/jenkins/agent/* /root/data/"
 	   }
 	}
     }
@@ -77,7 +77,7 @@ podTemplate(
 
 		stage('Scan') {
         	echo "starting codeAnalyze with SonarQube......"
-			sh "cp -r /root/data/workspace/$JOB_NAME/*  /home/jenkins/agent/workspace/$JOB_NAME/"
+			sh "cp -r /root/data/workspace/$JOB_NAME/*  /home/jenkins/agent/workspace/"
 			//sh "cp -r /root/data/workspace/$JOB_NAME/*  /home/jenkins/agent/workspace/$JOB_NAME/"
 		environment {
              		Sonar_ACCESS_KEY_ID     = credentials('sonar-secret-key-id')
