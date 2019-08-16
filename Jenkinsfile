@@ -118,8 +118,7 @@ podTemplate(
   		/*Dockerfile*/
 		sh "cp -r /root/data/workspace/cicdtest/*  /home/jenkins/agent/workspace/cicdtest/"
 		//sh ' echo "FROM centos \n RUN yum update -y && yum install -y java \n COPY /target/*.jar /usr/share/ \n ENTRYPOINT java -jar /usr/share/cicd-0.0.1-Beta.jar " > Dockerfile'
-  		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y maven && yum install -y wget && mkdir /usr/share/tomcat && cd /usr/share/tomcat && wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz && tar -zxf apache-tomcat-8.5.43.tar.gz && cd apache-tomcat-8.5.43/conf && rm -rf server.xml && wget https://raw.githubusercontent.com/PeterBrave/CICDserver/master/server.xml && /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start \n COPY /target/*.war /usr/share/tomcat/apache-tomcat-8.5.43/webapps \n CMD /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start \n ENTRYPOINT /usr/sbin/init" > Dockerfile'
-		//sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y tomcat && systemctl enable tomcat \n COPY /target/*.war /usr/share/tomcat/webapps/ \n ENTRYPOINT /usr/sbin/init" > Dockerfile'
+		sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y tomcat && systemctl enable tomcat \n COPY /target/*.war /usr/share/tomcat/webapps/ \n ENTRYPOINT /usr/sbin/init" > Dockerfile'
 		/*Build docker*/
         	sh "docker build -t ${deploy_docker_name} ."
   		/*Tag image*/
