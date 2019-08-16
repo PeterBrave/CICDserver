@@ -53,7 +53,6 @@ podTemplate(
 	          submoduleCfg: [], userRemoteConfigs: [[credentialsId:  '96ce8238-69cc-4acf-b2e9-ae6bb3818112',
 			url: 'https://github.com/PeterBrave/CICDserver.git']]])
 	}
-	}
             /*Build project*/
             stage('Build'){
 		//copy  front-end code
