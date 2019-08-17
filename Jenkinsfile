@@ -127,7 +127,7 @@ podTemplate(
 			sh "kubectl delete deployment.apps/${deploy_project_name} -n kube-jenkins"
 			/*Redeployed project*/
 			sh "kubectl create deployment ${deploy_project_name} --image=${tag_deploy_docker_name}"
-			sh "kubectl expose deployment ${deploy_project_name} --port=8082 --type=NodePort --nodePort=30003"
+			sh "kubectl expose deployment ${deploy_project_name} --port=8082 --type=NodePort"
             	}
        	}	
      }
