@@ -18,25 +18,6 @@ podTemplate(
     	container('environment') {
 		stage("Environment setup"){
 		    /*Dockerfile*/
-		    sh "cat >  deploy.yaml <<  EOF
-			kind: Deployment
-				metadata:
-				  name: ${AppName}
-				  namespace: ${NameSpace}
-				  labels:
-				    app: ${AppName}
-				    version: ${GitBranch}
-				    AppEnv: ${AppEnv}
-				spec:
-				  replicas: ${Replicas}
-				  selector:
-				    matchLabels:
-				      app: ${AppName}
-				  template:
-				    metadata:
-				      labels:
-					app: ${AppName}
-			EOF"
 		    sh 'echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y maven && curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.14.0/bin/linux/amd64/kubectl && chmod +x kubectl && mv kubectl /usr/local/bin/kubectl && yum install wget -y && wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo && yum -y install docker-ce-18.06.1.ce-3.el7 && yum install -y unzip && mkdir /home/sonarqube/ && wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip && unzip -o sonar-scanner-cli-4.0.0.1744-linux.zip -d /home/sonarqube/" > Dockerfile'
 		    //sh 'echo "FROM centos \n RUN yum update -y && yum install -y wget && yum install -y unzip && yum install -y maven && cd / && cd  && mkdir /home/sonarqube/ && wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip && unzip -o sonar-scanner-cli-4.0.0.1744-linux.zip -d /home/sonarqube/" > Dockerfile'
 		    /*Build docker*/
