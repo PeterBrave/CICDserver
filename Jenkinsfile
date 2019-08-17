@@ -18,7 +18,7 @@ podTemplate(
     	container('environment') {
 		stage("Environment setup"){
 		    /*Dockerfile*/
-		    sh "cat >  deploy.yaml <<-  EOF
+		    sh "cat >  deploy.yaml <<  EOF
 			kind: Deployment
 				metadata:
 				  name: ${AppName}
