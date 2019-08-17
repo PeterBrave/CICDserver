@@ -5,7 +5,6 @@ def tag_environment_docker_name = "zxpwin/environment-image" //The tag of slave 
 def deploy_docker_name = "cicd-test-docker"                  // The name of deployment image
 def tag_deploy_docker_name = "zxpwin/cicd-test-docker"     // The tag of  deployment image
 def deploy_project_name = "cicd-service"
-def jar_name = "cicd-0.0.1-Beta.jar"
 
 /*Setup the environment of the slave*/
 podTemplate(
@@ -109,7 +108,7 @@ podTemplate(
         	stage('Build Docker'){
 			/*Dockerfile*/
 			sh "cp -r /root/data/workspace/$JOB_NAME/*  /home/jenkins/agent/workspace/$JOB_NAME/"
-			sh ' echo "FROM centos \n RUN yum update -y && yum install -y java \n COPY /target/*.jar /usr/share/ \n ENTRYPOINT java -jar /usr/share/${jar_name} " > Dockerfile'
+			sh ' echo "FROM centos \n RUN yum update -y && yum install -y java \n COPY /target/*.jar /usr/share/ \n ENTRYPOINT java -jar /usr/share/cicd-0.0.1-Beta.jar " > Dockerfile'
 			//sh ' echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y wget &&  yum install -y tomcat && cd / && cd usr/share/tomcat/conf/ &&  rm -rf server.xml && wget https://raw.githubusercontent.com/PeterBrave/CICDserver/master/server.xml  && systemctl enable tomcat \n COPY /target/*.war /usr/share/tomcat/webapps/ \n ENTRYPOINT /usr/sbin/init" > Dockerfile'		
 			/*Build docker*/
 			sh "docker build -t ${deploy_docker_name} ."
