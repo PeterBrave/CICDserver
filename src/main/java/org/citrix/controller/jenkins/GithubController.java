@@ -98,7 +98,6 @@ public class GithubController {
                 httpPut.setEntity(new StringEntity(obj.toString()));
                 response = httpclient.execute(httpPut);
                 code = response.getStatusLine().getStatusCode();
-//                System.out.println("code = " + code);
                 if (code == 200 || code == 201) {
                     return RespBean.ok("JenkinsFile Updated Successfully");
                 } else {
@@ -112,7 +111,6 @@ public class GithubController {
                 httpPut.setEntity(new StringEntity(obj.toString()));
                 response = httpclient.execute(httpPut);
                 code = response.getStatusLine().getStatusCode();
-//                log.info("code = " + code);
                 if (code == 201 ) {
                     return RespBean.ok("Add JenkinsFile Successfully");
                 } else {

@@ -27,7 +27,7 @@ public class projectController {
     @PostMapping("/all")
     public RespBean getAllProjecct(@RequestParam("author") String author) {
         List<CICDProject> allProjects = cicdProjectMapper.getCICDProjectByAuthor(author);
-        return RespBean.ok("success", allProjects);
+        return RespBean.ok("load all project success", allProjects);
     }
 
     @PostMapping("/detail")
@@ -39,14 +39,20 @@ public class projectController {
     @PostMapping("/delete")
     public RespBean deleteProject(@RequestParam("name") String name) {
         cicdProjectMapper.deleteCICDProject(name);
-        return RespBean.ok("success", null);
+        return RespBean.ok("delete project success!", null);
     }
 
     @PostMapping("/add")
     public RespBean addProjecct(@RequestParam("name") String name, @RequestParam("author") String author,
                                 @RequestParam("language") String language, @RequestParam("type") int type) {
-         cicdProjectMapper.addCICDProject(name, author, language, type);
-        return RespBean.ok("success", null);
+        CICDProject project = new CICDProject();
+        project.setName(name);
+        project.setAuthor(author);
+        project.setLanguage(language);
+        project.setType(type);
+        project.setEnabled(false);
+         cicdProjectMapper.addCICDProject(project);
+        return RespBean.ok("add project success", null);
     }
     @PostMapping("/update")
     public RespBean updateProject(@RequestParam("name") String name,
@@ -65,7 +71,7 @@ public class projectController {
             e.printStackTrace();
 
         }
-        return RespBean.ok("success", null);
+        return RespBean.ok("update project success", null);
     }
 
 

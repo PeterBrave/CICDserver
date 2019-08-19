@@ -14,7 +14,8 @@ public interface CICDProjectMapper {
 
     int deleteCICDProject(@Param("name") String name);
 
-    int addCICDProject(@Param("name") String name, @Param("author") String author, @Param("language") String language, @Param("type") int type);
+//    int addCICDProject(@Param("name") String name, @Param("author") String author, @Param("language") String language, @Param("type") int type);
+    int addCICDProject(CICDProject project);
 
     int updateCICDProject(CICDProject project);
 }

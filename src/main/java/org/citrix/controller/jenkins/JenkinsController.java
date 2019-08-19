@@ -24,8 +24,7 @@ import java.util.Map;
 @RequestMapping("/jenkins")
 @Slf4j
 public class JenkinsController {
-//    @Autowired
-//    private JenkinsServer jenkinsServer;
+
     @Autowired
     private Configuration freemarkerConfiguration;
     private JenkinsServer jenkins;
@@ -46,34 +45,15 @@ public class JenkinsController {
         return jenkins;
     }
 
-    @PostMapping("/test")
-    public String test() {
-        try {
-            JenkinsServer jenkins = getJenkins(3);
-
-//            Map<String, Job> jobs = jenkinsServer.getJobs();
-//            JobWithDetails job = jenkinsServer.getJob("single");
-//
-//            Build build = job.getFirstBuild();  /*获取某任务第一次构建的构建对象*/
-//            BuildWithDetails buildWithDetails = build.details(); /*子类转型*/
-//            String logs = buildWithDetails.getConsoleOutputText(); /*获取构建的控制台输出信息 ，即构建日志*/
-            String logs = jenkins.getJobXml("cicdtest");
-            return logs;
-
-        } catch (Exception e) {
-            return "error";
-        }
-    }
-
     @PostMapping("/build")
     public RespBean buildProject(@RequestParam(value = "jobName") String jobName,
                                  @RequestParam(value = "type") int type) throws IOException{
         log.info("jobName = " + jobName);
-        System.out.println("jobName = " + jobName);
+        if (jobName == null) {
+            throw new IllegalArgumentException("jobName is null");
+        }
         try {
-//            JenkinsServer jenkins = new JenkinsServer(new URI("http://13.125.214.112:30002/"), "citrix", "zxcvfdsa321");
             JenkinsServer jenkins = getJenkins(type);
-//            JobWithDetails job = jenkinsServer.getJob(jobName);
             JobWithDetails job = jenkins.getJob(jobName);
             job.build();
             return RespBean.ok("Compile Successfully!");
@@ -85,21 +65,20 @@ public class JenkinsController {
 
     @PostMapping("/create")
     public RespBean createJob(@RequestParam(value = "projectName") String projectName,
-                              @RequestParam(value = "description") String description,
                               @RequestParam(value = "repo") String repo,
                               @RequestParam(value = "githubName") String githubName,
                               @RequestParam(value = "type") int type) throws Exception {
         log.info("projectName = " + projectName + ", type = " + type + ",repo =" + repo);
+        if (projectName == null || repo == null || githubName == null) {
+            throw new IllegalArgumentException("argument is null");
+        }
         try {
             JenkinsServer jenkins = getJenkins(type);
             Map<String, Object> map = new HashMap<>();
-            map.put("description", description);
             map.put("repo", repo);
             map.put("githubName", githubName);
             Template template = freemarkerConfiguration.getTemplate("jenkins-config.ftl");
             String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, map);
-//            log.info(content);
-//            jenkinsServer.createJob(projectName, content);
             jenkins.createJob(projectName, content);
             return RespBean.ok("Create Jenkins Job Successfully!");
         } catch (Exception e) {
@@ -111,11 +90,12 @@ public class JenkinsController {
     @PostMapping("/output")
     public String getConsoleOutput(@RequestParam(value = "projectName") String projectName,
                                    @RequestParam(value = "type") int type) throws IOException{
+        if (projectName == null) {
+            throw new IllegalArgumentException("projectName is null");
+        }
         try {
             JenkinsServer jenkins = getJenkins(type);
-//            JobWithDetails job = jenkinsServer.getJob(projectName);
             JobWithDetails job = jenkins.getJob(projectName);
-
             return job.getLastBuild().details().getConsoleOutputText();
 
         } catch (Exception e) {
