@@ -17,13 +17,13 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Slf4j
+@Transactional
 public class projectControllerTest {
 
     @Autowired
     CICDProjectMapper cicdProjectMapper;
 
     @Test
-    @Transactional
     public void addProject() {
         CICDProject project = new CICDProject();
         project.setName("testProject");
@@ -36,24 +36,34 @@ public class projectControllerTest {
     }
 
     @Test
-    public void getAllProjecct() {
+    public void getAllProject() {
+        CICDProject project = new CICDProject();
+        project.setName("testProject");
+        project.setAuthor("tester");
+        project.setLanguage("Java");
+        project.setType(0);
+        project.setEnabled(true);
+        cicdProjectMapper.addCICDProject(project);
         List<CICDProject> allProjects = cicdProjectMapper.getCICDProjectByAuthor("tester");
         log.info("allProjectSize = " + allProjects.size());
-        Assert.assertEquals(0, allProjects.size());
+        Assert.assertNotEquals(0, allProjects.size());
     }
 
     @Test
     public void updateProject() {
-        int result = 0;
-        CICDProject project = cicdProjectMapper.getCICDProjectByName("testProject");
-        project.setType(1);
+        CICDProject project = new CICDProject();
+        project.setName("testProject");
+        project.setAuthor("tester");
+        project.setLanguage("Java");
+        project.setType(0);
         project.setEnabled(true);
+        cicdProjectMapper.addCICDProject(project);
+        CICDProject project_1 = cicdProjectMapper.getCICDProjectByName("testProject");
+        project_1.setType(1);
+        project_1.setEnabled(true);
         cicdProjectMapper.updateCICDProject(project);
         CICDProject project_after = cicdProjectMapper.getCICDProjectByName("testProject");
-        if (project_after.getType() == 1 && project_after.isEnabled() == true) {
-            result = 1;
-        }
-        Assert.assertNotEquals(0, result);
+        Assert.assertEquals(1, project_after.getType());
     }
 
     @Test
