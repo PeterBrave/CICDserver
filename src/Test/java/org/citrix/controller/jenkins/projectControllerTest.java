@@ -12,8 +12,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Slf4j
@@ -67,13 +65,29 @@ public class projectControllerTest {
 
     @Test
     public void getProjectDetail() {
+        CICDProject new_project = new CICDProject();
+        new_project.setName("testProject");
+        new_project.setAuthor("tester");
+        new_project.setLanguage("Java");
+        new_project.setType(0);
+        new_project.setEnabled(true);
+        cicdProjectMapper.addCICDProject(new_project);
+        CICDProject project = cicdProjectMapper.getCICDProjectByName("testProject");
+        Assert.assertEquals("testProject", project.getName());
+
     }
 
     @Test
     public void deleteProject() {
+        CICDProject new_project = new CICDProject();
+        new_project.setName("testProject");
+        new_project.setAuthor("tester");
+        new_project.setLanguage("Java");
+        new_project.setType(0);
+        new_project.setEnabled(true);
+        cicdProjectMapper.addCICDProject(new_project);
+        int result = cicdProjectMapper.deleteCICDProject("testProject");
+        Assert.assertNotNull(result);
     }
-
-
-
 
 }

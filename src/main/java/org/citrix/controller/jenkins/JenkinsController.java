@@ -29,17 +29,12 @@ public class JenkinsController {
     private Configuration freemarkerConfiguration;
     private JenkinsServer jenkins;
 
-    private JenkinsServer getJenkins(int type) {
+    private JenkinsServer getJenkins(int type) throws URISyntaxException{
         if (jenkins == null) {
-            try {
-                if (type == 1 || type == 2) {
-                    jenkins = new JenkinsServer(new URI("http://3.15.149.72:8080"), "admin123", "zxcvfdsa321");
-                }else if (type == 3) {
-                    jenkins = new JenkinsServer(new URI("http://13.125.214.112:30002/"), "citrix", "zxcvfdsa321");
-                }
-
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
+            if (type == 1 || type == 2) {
+                jenkins = new JenkinsServer(new URI("http://3.15.149.72:8080"), "admin123", "zxcvfdsa321");
+            }else if (type == 3) {
+                jenkins = new JenkinsServer(new URI("http://13.125.214.112:30002/"), "citrix", "zxcvfdsa321");
             }
         }
         return jenkins;
