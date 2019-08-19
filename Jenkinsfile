@@ -58,7 +58,7 @@ podTemplate(
             }
 	  stage('Unit test') { 
         	sh 'mvn test'
-		sh 'echo echo "apiVersion: v1 \n kind: Service \n metadata: \n\t name: cicd \n\t namespace: kube-jenkins \n\t labels: \n\t\t app: cicd-service \n spec: \n\t  selector: \n\t\t   app: cicd-service  \n\t type: NodePort \n\t  ports: \n\t - name: web \n\t\t   port: 8082 \n\t\t  nodePort: 30004" > k8s.yaml'
+		sh 'echo "apiVersion: v1 \n kind: Service \n metadata: \n\t name: cicd \n\t namespace: kube-jenkins \n\t labels: \n\t\t app: cicd-service \n spec: \n\t selector: \n\t\t app: cicd-service \n\t type: NodePort \n\t ports: \n\t - name: web \n\t\t port: 8082 \n\t\t nodePort: 30004" > k8s.yaml'
 		sh "cp -r /home/jenkins/agent/* /root/data/"
 	   }
 	}
