@@ -45,22 +45,21 @@ public class projectControllerTest {
         project.setEnabled(true);
         cicdProjectMapper.addCICDProject(project);
         List<CICDProject> allProjects = cicdProjectMapper.getCICDProjectByAuthor("tester");
-        log.info("allProjectSize = " + allProjects.size());
         Assert.assertNotEquals(0, allProjects.size());
     }
 
     @Test
     public void updateProject() {
-        CICDProject project = new CICDProject();
-        project.setName("testProject");
-        project.setAuthor("tester");
-        project.setLanguage("Java");
-        project.setType(0);
+        CICDProject new_project = new CICDProject();
+        new_project.setName("testProject");
+        new_project.setAuthor("tester");
+        new_project.setLanguage("Java");
+        new_project.setType(0);
+        new_project.setEnabled(true);
+        cicdProjectMapper.addCICDProject(new_project);
+        CICDProject project = cicdProjectMapper.getCICDProjectByName("testProject");
+        project.setType(1);
         project.setEnabled(true);
-        cicdProjectMapper.addCICDProject(project);
-        CICDProject project_1 = cicdProjectMapper.getCICDProjectByName("testProject");
-        project_1.setType(1);
-        project_1.setEnabled(true);
         cicdProjectMapper.updateCICDProject(project);
         CICDProject project_after = cicdProjectMapper.getCICDProjectByName("testProject");
         Assert.assertEquals(1, project_after.getType());
