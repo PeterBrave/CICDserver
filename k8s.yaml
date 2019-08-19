@@ -1,14 +1,15 @@
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
-  name: jenkins-demo
+  name: cicd
+  namespace: kube-jenkins
+  labels:
+    app: cicd-service
 spec:
-  template:
-    metadata:
-      labels:
-        app: jenkins-demo
-    spec:
-      containers:
-      - image: cnych/jenkins-demo
-        imagePullPolicy: IfNotPresent
-        name: jenkins-demo
+  selector:
+    app: cicd-service
+  type: NodePort
+  ports:
+  - name: web
+    port: 8082
+    nodePort: 30003
