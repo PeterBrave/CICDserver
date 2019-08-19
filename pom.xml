@@ -6,7 +6,7 @@
     <groupId>org.sang</groupId>
     <artifactId>cicd</artifactId>
     <version>0.0.1-Beta</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>cicd</name>
     <description>Demo project for Spring Boot</description>
