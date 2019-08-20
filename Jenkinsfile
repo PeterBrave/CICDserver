@@ -58,7 +58,7 @@ podTemplate(
             }
 	  stage('Unit test') { 
         	sh 'mvn test'
-		sh 'echo " apiVersion: v1 \n kind: Service \n metadata: \n\t name: cicd \n\t namespace: kube-jenkins \n\t labels: \n\t\t app: cicd-service \n spec: \n\t selector: \n\t\t app: cicd-service \n\t type: NodePort \n\t ports: \n\t - name: web \n\t\t port: 8082 \n\t\t nodePort: 30004" > k8s.yaml'
+		sh 'echo " apiVersion: v1 \n kind: Service \n metadata: \n   name: cicd\n   namespace: kube-jenkins \n   labels: \n     app: cicd-service \n spec: \n   selector: \n     app: cicd-service \n   type: NodePort \n   ports: \n   - name: web \n     port: 8082 \n     nodePort: 30004" > k8s.yaml'
 		sh "cp -r /home/jenkins/agent/* /root/data/"
 	   }
 	}
@@ -129,7 +129,7 @@ podTemplate(
 			/*Redeployed project*/
 			sh "kubectl create deployment ${deploy_project_name} --image=${tag_deploy_docker_name}"
 			//sh "kubectl expose deployment ${deploy_project_name} --port=8082  --type=NodePort"
-			sh 'echo " apiVersion: v1 \n kind: Service \n metadata: \n\t name: cicd-service \n\t namespace: kube-jenkins \n\t labels: \n\t\t app: cicd-service \n spec: \n\t selector: \n\t\t app: cicd-service \n\t type: NodePort \n\t ports: \n\t - name: web \n\t\t port: 8082 \n\t\t nodePort: 30004" > k8s.yaml'
+			sh 'echo " apiVersion: v1 \n kind: Service \n metadata: \n   name: cicd\n   namespace: kube-jenkins \n   labels: \n     app: cicd-service \n spec: \n   selector: \n     app: cicd-service \n   type: NodePort \n   ports: \n   - name: web \n     port: 8082 \n     nodePort: 30004" > k8s.yaml'
 			sh "kubectl create -f k8s.yaml"
             	}
        	}	
