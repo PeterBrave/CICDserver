@@ -129,6 +129,7 @@ podTemplate(
 			/*Redeployed project*/
 			sh "kubectl create deployment ${deploy_project_name} --image=${tag_deploy_docker_name}"
 			//sh "kubectl expose deployment ${deploy_project_name} --port=8082  --type=NodePort"
+			//Deploymet yaml file, 
 			sh 'echo " apiVersion: v1 \n kind: Service \n metadata: \n   name: cicd\n   namespace: kube-jenkins \n   labels: \n     app: cicd-service \n spec: \n   selector: \n     app: cicd-service \n   type: NodePort \n   ports: \n   - name: web \n     port: 8082 \n     nodePort: 30004" > k8s.yaml'
 			sh "kubectl create -f k8s.yaml"
             	}
