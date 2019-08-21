@@ -1,7 +1,8 @@
 package org.citrix.service;
 
 import org.citrix.bean.Hr;
-import org.citrix.common.HrUtils;
+import org.citrix.enums.ResultEnum;
+import org.citrix.exception.CICDException;
 import org.citrix.mapper.HrMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,8 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Created by citrix on 2017/12/28.
@@ -24,7 +23,7 @@ public class HrService implements UserDetailsService {
     private HrMapper hrMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+    public Hr loadUserByUsername(String s) throws UsernameNotFoundException {
         Hr hr = hrMapper.loadUserByUsername(s);
         if (hr == null) {
             throw new UsernameNotFoundException("用户名不对");
@@ -46,32 +45,12 @@ public class HrService implements UserDetailsService {
         return 1;
     }
 
-    public List<Hr> getHrsByKeywords(String keywords) {
-        return hrMapper.getHrsByKeywords(keywords);
-    }
-
     public int updateHr(Hr hr) {
-        return hrMapper.updateHr(hr);
+        int result = hrMapper.updateHr(hr);
+        if (result == 1) {
+            return result;
+        }else {
+            throw new CICDException(ResultEnum.UPDATE_DATA_ERROR);
+        }
     }
-
-    public int updateHrRoles(Long hrId, Long[] rids) {
-        int i = hrMapper.deleteRoleByHrId(hrId);
-        return hrMapper.addRolesForHr(hrId, rids);
-    }
-
-    public Hr getHrById(Long hrId) {
-        return hrMapper.getHrById(hrId);
-    }
-
-    public int deleteHr(Long hrId) {
-        return hrMapper.deleteHr(hrId);
-    }
-
-    public List<Hr> getAllHrExceptAdmin() {
-        return hrMapper.getAllHr(HrUtils.getCurrentHr().getId());
-    }
-    public List<Hr> getAllHr() {
-        return hrMapper.getAllHr(null);
-    }
-
 }

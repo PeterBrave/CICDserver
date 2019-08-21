@@ -44,18 +44,20 @@ public class JenkinsController {
     public RespBean buildProject(@RequestParam(value = "jobName") String jobName,
                                  @RequestParam(value = "type") int type) throws IOException{
         log.info("jobName = " + jobName);
-        if (jobName == null) {
-            throw new IllegalArgumentException("jobName is null");
-        }
         try {
+            if (jobName == null) {
+                throw new IllegalArgumentException("jobName is null");
+            }
             JenkinsServer jenkins = getJenkins(type);
-            JobWithDetails job = jenkins.getJob(jobName);
-            job.build();
-            return RespBean.ok("Compile Successfully!");
-
+            if (jenkins != null) {
+                JobWithDetails job = jenkins.getJob(jobName);
+                job.build();
+                return RespBean.ok("Compile Successfully!");
+            }
         } catch (Exception e) {
             return RespBean.error("Failed to Compile");
         }
+        return RespBean.error("Failed to Compile");
     }
 
     @PostMapping("/create")
@@ -69,13 +71,15 @@ public class JenkinsController {
         }
         try {
             JenkinsServer jenkins = getJenkins(type);
-            Map<String, Object> map = new HashMap<>();
-            map.put("repo", repo);
-            map.put("githubName", githubName);
-            Template template = freemarkerConfiguration.getTemplate("jenkins-config.ftl");
-            String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, map);
-            jenkins.createJob(projectName, content);
-            return RespBean.ok("Create Jenkins Job Successfully!");
+            if (jenkins != null) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("repo", repo);
+                map.put("githubName", githubName);
+                Template template = freemarkerConfiguration.getTemplate("jenkins-config.ftl");
+                String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, map);
+                jenkins.createJob(projectName, content);
+                return RespBean.ok("Create Jenkins Job Successfully!");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -90,14 +94,14 @@ public class JenkinsController {
         }
         try {
             JenkinsServer jenkins = getJenkins(type);
-            JobWithDetails job = jenkins.getJob(projectName);
-            return job.getLastBuild().details().getConsoleOutputText();
-
+            if (jenkins != null) {
+                JobWithDetails job = jenkins.getJob(projectName);
+                return job.getLastBuild().details().getConsoleOutputText();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return "Failed to Get Building Result!";
         }
-
+        return "Failed to Get Building Result!";
     }
-
 }

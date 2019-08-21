@@ -5,7 +5,9 @@ import org.citrix.bean.Hr;
 import org.citrix.bean.RespBean;
 import org.citrix.common.HrUtils;
 import org.citrix.mapper.HrMapper;
+import org.citrix.service.HrService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -18,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    HrMapper hrMapper;
+    HrService hrService;
 
     @GetMapping("/info")
     public RespBean getUserInfo() {
@@ -31,8 +33,8 @@ public class UserController {
                                    @RequestParam(value = "githubToken") String githubToken,
                                    @RequestParam(value = "email") String email,
                                    @RequestParam(value = "address") String address,
-                                   @RequestParam(value = "phone") String phone) {
-        log.info("phone = " + phone);
+                                   @RequestParam(value = "phone") String phone,
+                                   @RequestParam(value = "userface") String userface) {
         Hr hr = HrUtils.getCurrentHr();
         hr.setName(name);
         hr.setGithubName(githubName);
@@ -40,11 +42,13 @@ public class UserController {
         hr.setEmail(email);
         hr.setAddress(address);
         hr.setPhone(phone);
-        try {
-            hrMapper.updateHr(hr);
-        } catch (Exception e) {
-            return RespBean.error("update error");
+        hr.setUserface(userface);
+        int result = hrService.updateHr(hr);
+        if (result == 1){
+            return RespBean.ok("user information update success", HrUtils.getCurrentHr());
+        }else {
+            return RespBean.error("user information update error");
         }
-        return RespBean.ok("success", HrUtils.getCurrentHr());
+
     }
 }

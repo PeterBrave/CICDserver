@@ -3,6 +3,8 @@ package org.citrix.controller.jenkins;
 import lombok.extern.slf4j.Slf4j;
 import org.citrix.bean.CICDProject;
 import org.citrix.bean.RespBean;
+import org.citrix.enums.ResultEnum;
+import org.citrix.exception.CICDException;
 import org.citrix.mapper.CICDProjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,25 +27,38 @@ public class projectController {
     private CICDProjectMapper cicdProjectMapper;
 
     @PostMapping("/all")
-    public RespBean getAllProjecct(@RequestParam("author") String author) {
+    public RespBean getAllProject(@RequestParam("author") String author) {
         List<CICDProject> allProjects = cicdProjectMapper.getCICDProjectByAuthor(author);
-        return RespBean.ok("load all project success", allProjects);
+        if (allProjects != null) {
+            return RespBean.ok(null, allProjects);
+        } else {
+            throw new CICDException(ResultEnum.GET_DATA_ERROR);
+        }
     }
 
     @PostMapping("/detail")
     public RespBean getProjectDetail(@RequestParam("name") String name){
         CICDProject project = cicdProjectMapper.getCICDProjectByName(name);
-        return RespBean.ok("success", project);
+        if (project != null) {
+            return RespBean.ok("success", project);
+        } else {
+            throw new CICDException(ResultEnum.GET_DATA_ERROR);
+        }
+
     }
 
     @PostMapping("/delete")
-    public RespBean deleteProject(@RequestParam("name") String name) {
-        cicdProjectMapper.deleteCICDProject(name);
-        return RespBean.ok("delete project success!", null);
+    public Boolean deleteProject(@RequestParam("name") String name) {
+        int result = cicdProjectMapper.deleteCICDProject(name);
+        if (result == 1) {
+            return true;
+        }else {
+            throw new CICDException(ResultEnum.DELETE_DATA_ERROR);
+        }
     }
 
     @PostMapping("/add")
-    public RespBean addProjecct(@RequestParam("name") String name, @RequestParam("author") String author,
+    public boolean addProject(@RequestParam("name") String name, @RequestParam("author") String author,
                                 @RequestParam("language") String language, @RequestParam("type") int type) {
         CICDProject project = new CICDProject();
         project.setName(name);
@@ -51,11 +66,15 @@ public class projectController {
         project.setLanguage(language);
         project.setType(type);
         project.setEnabled(false);
-         cicdProjectMapper.addCICDProject(project);
-        return RespBean.ok("add project success", null);
+        int result = cicdProjectMapper.addCICDProject(project);
+        if (result == 1) {
+            return true;
+        } else {
+            throw new CICDException(ResultEnum.INSERT_DB_ERROR);
+        }
     }
     @PostMapping("/update")
-    public RespBean updateProject(@RequestParam("name") String name,
+    public Boolean updateProject(@RequestParam("name") String name,
                                   @RequestParam("type") int type,
                                   @RequestParam("enable") boolean enable) {
         CICDProject project = cicdProjectMapper.getCICDProjectByName(name);
@@ -65,13 +84,12 @@ public class projectController {
         if (enable !=false) {
             project.setEnabled(enable);
         }
-        try {
-            cicdProjectMapper.updateCICDProject(project);
-        } catch (Exception e){
-            e.printStackTrace();
-
+        int result = cicdProjectMapper.updateCICDProject(project);
+        if (result == 1) {
+            return true;
+        } else {
+            throw new CICDException(ResultEnum.UPDATE_DATA_ERROR);
         }
-        return RespBean.ok("update project success", null);
     }
 
 

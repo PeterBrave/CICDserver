@@ -28,12 +28,4 @@ public class MenuService {
     public List<Menu> getMenusByHrId() {
         return menuMapper.getMenusByHrId(HrUtils.getCurrentHr().getId());
     }
-
-    public List<Menu> menuTree() {
-        return menuMapper.menuTree();
-    }
-
-    public List<Long> getMenusByRid(Long rid) {
-        return menuMapper.getMenusByRid(rid);
-    }
 }

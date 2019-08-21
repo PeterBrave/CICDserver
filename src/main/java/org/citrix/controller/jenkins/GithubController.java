@@ -11,7 +11,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.citrix.bean.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,32 +36,33 @@ public class GithubController {
     private Configuration freemarkerConfiguration;
 
     @PostMapping("/content")
-    public String getContent(@RequestParam(value = "repo") String repo,
+    public RespBean getContent(@RequestParam(value = "repo") String repo,
                              @RequestParam(value = "language") String language,
                              @RequestParam(value = "githubName") String githubName,
-                             @RequestParam(value = "githubToken") String githubToken) throws IOException, TemplateException {
-        log.info("/github/content  repo = " + repo + "language = " + language);
-        try {
-            //拼接Base64Token
-            String rawToken = githubName + ":" + githubToken;
-            String middleToken = string2Base64(rawToken);
-            String finalToken = "Basic " + middleToken;
-            log.info("finalToken = " + finalToken);
+                             @RequestParam(value = "githubToken") String githubToken,
+                             @RequestParam(value = "type") int type) throws IOException, TemplateException {
+        log.info("/github/content  repo = " + repo + " language = " + language);
 
-            String uri = "https://api.github.com/repos/"+ githubName + "/" + repo + "/contents/Jenkinsfile";
-            HttpResponse response = getJenkinsFileContent(repo, uri,finalToken);
-            int code = response.getStatusLine().getStatusCode();
-            log.info("code = " + code);
+        String finalToken = getFinalToken(githubName, githubToken);
+        String uri = "https://api.github.com/repos/"+ githubName + "/" + repo + "/contents/Jenkinsfile";
+        HttpResponse response = getJenkinsFileContent(uri,finalToken);
+        int code = response.getStatusLine().getStatusCode();
+        if (code == 200) {
             String rev = EntityUtils.toString(response.getEntity());
             com.alibaba.fastjson.JSONObject jsonObject = com.alibaba.fastjson.JSONObject.parseObject(rev);
             String r = jsonObject.getString("content");
-            //base64转string
-            return base642String(r);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Template template = freemarkerConfiguration.getTemplate("pipeline-"+language+".ftl");
-            String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, null);
-            return content;
+            return RespBean.ok("Load Github JenkinsFile successful!" , base642String(r));
+        } else {
+            if (type == 1 || type == 2) {
+                Template template = freemarkerConfiguration.getTemplate("vm-pipeline-"+language+".ftl");
+                String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, null);
+                return RespBean.ok("Load vm-"+ language + " template successful!", content);
+            } else if (type == 3) {
+                Template template = freemarkerConfiguration.getTemplate("docker-pipeline-"+language+".ftl");
+                String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, null);
+                return RespBean.ok("Load vm-"+ language + " template successful!", content);
+            }
+            return RespBean.error("Load jenkins file error!");
         }
     }
 
@@ -67,18 +70,15 @@ public class GithubController {
     public RespBean commitFile(@RequestParam(value = "codeContent") String codeContent,
                                @RequestParam(value = "repo") String repo,
                                @RequestParam(value = "githubName") String githubName,
-                               @RequestParam(value = "githubToken") String githubToken) {
-        try {
+                               @RequestParam(value = "githubToken") String githubToken) throws IOException {
+
             //拼接Base64Token
-            String rawToken = githubName + ":" + githubToken;
-            String middleToken = string2Base64(rawToken);
-            String finalToken = "Basic " + middleToken;
-            log.info("finalToken = " + finalToken);
+            String finalToken = getFinalToken(githubName, githubToken);
 
-
-            HttpClient httpclient = new DefaultHttpClient();
             String uri = "https://api.github.com/repos/" + githubName + "/" + repo + "/contents/Jenkinsfile";
-            HttpResponse response = getJenkinsFileContent(repo, uri, finalToken);
+
+            CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+            HttpResponse response = getJenkinsFileContent(uri, finalToken);
             int code = response.getStatusLine().getStatusCode();
             HttpPut httpPut = new HttpPut(uri);
             //添加http头信息
@@ -96,12 +96,12 @@ public class GithubController {
                 obj.put("content", s);
                 obj.put("sha", r);
                 httpPut.setEntity(new StringEntity(obj.toString()));
-                response = httpclient.execute(httpPut);
+                response = httpClient.execute(httpPut);
                 code = response.getStatusLine().getStatusCode();
                 if (code == 200 || code == 201) {
                     return RespBean.ok("JenkinsFile Updated Successfully");
                 } else {
-                    return RespBean.error("Update Failed");
+                    return RespBean.error("JenkinsFile Update Failed");
                 }
 
             } else if (code == 404) {
@@ -109,7 +109,7 @@ public class GithubController {
                 obj.put("message", "Add Set up file");
                 obj.put("content", s);
                 httpPut.setEntity(new StringEntity(obj.toString()));
-                response = httpclient.execute(httpPut);
+                response = httpClient.execute(httpPut);
                 code = response.getStatusLine().getStatusCode();
                 if (code == 201 ) {
                     return RespBean.ok("Add JenkinsFile Successfully");
@@ -117,20 +117,16 @@ public class GithubController {
                     return RespBean.error("Add JenkinsFile Failed");
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-        return RespBean.error("Failed to Modify File");
+            return RespBean.error("Failed to Modify File");
     }
 
-    private HttpResponse getJenkinsFileContent(String repo, String uri, String token) throws IOException{
-        HttpClient httpclient = new DefaultHttpClient();
+    private HttpResponse getJenkinsFileContent(String uri, String token) throws IOException{
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet httpGet = new HttpGet(uri);
         httpGet.addHeader("Authorization", token);
         httpGet.addHeader("Content-Type", "application/json");
         HttpResponse response;
-        response = httpclient.execute(httpGet);
+        response = httpClient.execute(httpGet);
         return response;
     }
 
@@ -146,6 +142,14 @@ public class GithubController {
         byte[] b = base64.decode(s);
         String content = new String(b);
         return content;
+    }
+
+    //拼接Base64Token
+    private String getFinalToken(String githubName, String githubToken) {
+        String rawToken = githubName + ":" + githubToken;
+        String middleToken = string2Base64(rawToken);
+        String finalToken = "Basic " + middleToken;
+        return finalToken;
     }
 
 

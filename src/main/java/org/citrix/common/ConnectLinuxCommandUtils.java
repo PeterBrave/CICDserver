@@ -43,68 +43,8 @@ public class ConnectLinuxCommandUtils {
         }
         return flag;
     }
-    /**
-     *
-     * @Title: loginByKey
-     * @Description: 秘钥方式  远程登录linux服务器
-     * @param remoteConnect
-     * @param keyFile  一个文件对象指向一个文件，该文件包含OpenSSH密钥格式的用户的DSA或RSA私钥(PEM，不能丢失"-----BEGIN DSA PRIVATE KEY-----" or "-----BEGIN RSA PRIVATE KEY-----"标签
-     * @param keyfilePass 如果秘钥文件加密 需要用该参数解密，如果没有加密可以为null
-     * @return Boolean
-     * @throws
-     */
-    public static Boolean loginByFileKey(RemoteConnect remoteConnect, File keyFile, String keyfilePass) {
-        boolean flag = false;
-        // 输入密钥所在路径
-        // File keyfile = new File("C:\\temp\\private");
-        try {
-            conn = new Connection(remoteConnect.getIp());
-            conn.connect();
-            // 登录认证
-            flag = conn.authenticateWithPublicKey(remoteConnect.getUserName(), keyFile, keyfilePass);
-            if (flag) {
-                log.info("认证成功！");
-            } else {
-                log.info("认证失败！");
-                conn.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return flag;
-    }
 
-    /**
-     *
-     * @Title: loginByCharsKey
-     * @Description: 秘钥方式  远程登录linux服务器
-     * @param remoteConnect
-     * @param keys  一个字符[]，其中包含用户的DSA或RSA私钥(OpenSSH密匙格式，您不能丢失“----- begin DSA私钥-----”或“-----BEGIN RSA PRIVATE KEY-----“标签。char数组可以包含换行符/换行符。
-     * @param keyPass 如果秘钥字符数组加密  需要用该字段解密  否则不需要可以为null
-     * @return Boolean
-     * @throws
-     */
-    public static Boolean loginByCharsKey(RemoteConnect remoteConnect, char[] keys, String keyPass) {
-
-        boolean flag = false;
-        // 输入密钥所在路径
-        // File keyfile = new File("C:\\temp\\private");
-        try {
-            conn = new Connection(remoteConnect.getIp());
-            conn.connect();
-            // 登录认证
-            flag = conn.authenticateWithPublicKey(remoteConnect.getUserName(), keys, keyPass);
-            if (flag) {
-                log.info("认证成功！");
-            } else {
-                log.info("认证失败！");
-                conn.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return flag;
-    }
+   
     /**
      *
      * @Title: execute
@@ -209,64 +149,6 @@ public class ConnectLinuxCommandUtils {
         }
         return returnStr;
     }
-//    /**
-//     *
-//     * @Title: scpGet
-//     * @Description: 从其他服务器获取文件到本服务器指定目录
-//     * @param host ip(其他服务器)
-//     * @param username 用户名(其他服务器)
-//     * @param password 密码(其他服务器)
-//     * @param remoteFile 文件位置(其他服务器)
-//     * @param localDir 本服务器目录
-//     * @throws IOException
-//     * @return void
-//     * @throws
-//     */
-//    public static void scpGet(String ip, String userName, String password, String remoteFile, String localDir)
-//            throws IOException {
-//
-//        log.info("ConnectLinuxCommand  scpGet===" + "ip:" + ip + "  userName:" + userName + "  remoteFile:"
-//                + remoteFile + "  localDir:" + localDir);
-//        RemoteConnect remoteConnect = new RemoteConnect();
-//        remoteConnect.setIp(ip);
-//        remoteConnect.setUserName(userName);
-//        remoteConnect.setPassword(password);
-//
-//        if (login(remoteConnect)) {
-//            SCPClient client = new SCPClient(conn);
-//            client.get(remoteFile, localDir);
-//            conn.close();
-//        }
-//    }
-//    /**
-//     *
-//     * @Title: scpPut
-//     * @Description: 将文件复制到其他计算机中
-//     * @param host
-//     * @param username
-//     * @param password
-//     * @param localFile
-//     * @param remoteDir
-//     * @throws IOException
-//     * @return void
-//     * @throws
-//     */
-//    public static void scpPut(String ip, String userName, String password, String localFile, String remoteDir)
-//            throws IOException {
-//        log.info("ConnectLinuxCommand  scpPut===" + "ip:" + ip + "  userName:" + userName + "  localFile:"
-//                + localFile + "  remoteDir:" + remoteDir);
-//
-//        RemoteConnect remoteConnect = new RemoteConnect();
-//        remoteConnect.setIp(ip);
-//        remoteConnect.setUserName(userName);
-//        remoteConnect.setPassword(password);
-//
-//        if (login(remoteConnect)) {
-//            SCPClient client = new SCPClient(conn);
-//            client.put(localFile, remoteDir);
-//            conn.close();
-//        }
-//    }
 
 
 }

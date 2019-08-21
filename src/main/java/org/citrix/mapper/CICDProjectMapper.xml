@@ -21,10 +21,6 @@
         DELETE FROM project where `name`=#{name}
     </delete>
 
-    <!--<insert id="addCICDProject">-->
-        <!--INSERT INTO project set `name`=#{name},author=#{author},`language`=#{language},`type`=#{type},create_time=now()-->
-    <!--</insert>-->
-
     <insert id="addCICDProject" parameterType="org.citrix.bean.CICDProject">
         INSERT INTO project(id, `name`, author, `language`, `type`, create_time, enabled) values (null, #{name:VARCHAR},#{author:VARCHAR},#{language:VARCHAR},#{type:INTEGER},now(),#{enabled:BIT})
     </insert>

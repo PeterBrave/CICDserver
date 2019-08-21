@@ -21,8 +21,13 @@ public class RegisterController {
     @PostMapping
     public RespBean registerUser(@RequestParam("username") String username,
                                @RequestParam("password") String password) {
-        hrService.hrReg(username, password);
-        return RespBean.ok("添加成功!");
+        int result = hrService.hrReg(username, password);
+        if (result == 1) {
+            return RespBean.ok("Register Successful!");
+        } else if (result == -1){
+            return RespBean.error("The username already exists!");
+        } else {
+            return RespBean.error("Register Failed!");
+        }
     }
-
 }
