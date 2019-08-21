@@ -21,7 +21,7 @@ podTemplate(
 		    sh 'echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y maven && curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.14.0/bin/linux/amd64/kubectl && chmod +x kubectl && mv kubectl /usr/local/bin/kubectl && yum install wget -y && wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo && yum -y install docker-ce-18.06.1.ce-3.el7 && yum install -y unzip && mkdir /home/sonarqube/ && wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip && unzip -o sonar-scanner-cli-4.0.0.1744-linux.zip -d /home/sonarqube/" > Dockerfile'
 		    //sh 'echo "FROM centos \n RUN yum update -y && yum install -y wget && yum install -y unzip && yum install -y maven && cd / && cd  && mkdir /home/sonarqube/ && wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip && unzip -o sonar-scanner-cli-4.0.0.1744-linux.zip -d /home/sonarqube/" > Dockerfile'
 		    /*Build docker*/
-		    sh "docker build -t ${environment_docker_name} ."
+		    sh "docker build -t $environment_docker_name ."
 		    /*Tag image*/
 		    sh "docker tag ${environment_docker_name} ${tag_environment_docker_name}"
 		    /*Login the docker hub and push image to the hub*/
@@ -47,8 +47,7 @@ podTemplate(
 	   /*Clone code form github*/
 	   stage('Clone'){
 		checkout ([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [],
-	          submoduleCfg: [], userRemoteConfigs: [[credentialsId:  '96ce8238-69cc-4acf-b2e9-ae6bb3818112',
-			url: 'https://github.com/PeterBrave/CICDserver.git']]])
+	          submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/PeterBrave/CICDserver.git']]])
 	}
             /*Build project*/
             stage('Build'){
@@ -58,6 +57,7 @@ podTemplate(
             }
 	  stage('Unit test') { 
         	sh 'mvn test'
+		sh 'echo " apiVersion: v1 \n kind: Service \n metadata: \n   name: cicd\n   namespace: kube-jenkins \n   labels: \n     app: cicd-service \n spec: \n   selector: \n     app: cicd-service \n   type: NodePort \n   ports: \n   - name: web \n     port: 8082 \n     nodePort: 30004" > k8s.yaml'
 		sh "cp -r /home/jenkins/agent/* /root/data/"
 	   }
 	}
@@ -128,6 +128,9 @@ podTemplate(
 			/*Redeployed project*/
 			sh "kubectl create deployment ${deploy_project_name} --image=${tag_deploy_docker_name}"
 			//sh "kubectl expose deployment ${deploy_project_name} --port=8082  --type=NodePort"
+			//Deploymet yaml file,
+			//IP: 13.125.180.242,  52.79.36.119,   13.125.214.112 :[nodePort]
+			sh 'echo " apiVersion: v1 \n kind: Service \n metadata: \n   name: cicd-service \n   namespace: kube-jenkins \n   labels: \n     app: cicd-service \n spec: \n   selector: \n     app: cicd-service \n   type: NodePort \n   ports: \n   - name: web \n     port: 8082 \n     nodePort: 30004" > k8s.yaml'
 			sh "kubectl create -f k8s.yaml"
             	}
        	}	
