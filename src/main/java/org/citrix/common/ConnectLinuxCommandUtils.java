@@ -39,12 +39,12 @@ public class ConnectLinuxCommandUtils {
                 conn.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info("error", e);
         }
         return flag;
     }
 
-   
+
     /**
      *
      * @Title: execute
@@ -61,35 +61,17 @@ public class ConnectLinuxCommandUtils {
             result = processStdout(session.getStdout(), DEFAULTCHARTSET);
             // 如果为得到标准输出为空，说明脚本执行出错了
             if (StringUtils.isBlank(result)) {
+                log.info("Oops!Some thing wrong happened!");
                 result = processStdout(session.getStderr(), DEFAULTCHARTSET);
             }
             conn.close();
             session.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info("error", e);
         }
         return result;
     }
-    /**
-     * @Title: executeSuccess
-     * @Description: 远程执行shell脚本或者命令
-     * @param shell脚本或者命令
-     * @return String 命令执行成功后返回的结果值，如果命令执行失败，返回空字符串，不是null
-     * @throws
-     */
-    public static String executeSuccess(String cmd){
-        String result = "";
-        try {
-            Session session = conn.openSession();// 打开一个会话
-            session.execCommand(cmd);// 执行命令
-            result = processStdout(session.getStdout(), DEFAULTCHARTSET);
-            conn.close();
-            session.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
+
     /**
      *
      * @Title: processStdout
@@ -109,9 +91,9 @@ public class ConnectLinuxCommandUtils {
                 buffer.append(line + "\n");
             }
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            log.info("error", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info("error", e);
         }
         return buffer.toString();
     }
@@ -138,10 +120,10 @@ public class ConnectLinuxCommandUtils {
         try {
             if (login(remoteConnect)) {
                 returnStr = execute(commandStr);
-                System.out.println(returnStr);
+                log.info(returnStr);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info("error", e);
         }
 
         if (StringUtils.isBlank(returnStr)) {

@@ -23,13 +23,11 @@ public class ServerController {
         String commandStr = bashContent;
 
         if (serverId == 2) {
-            String result = ConnectLinuxCommandUtils.connectLinux("18.217.25.160", "root", "zxcvfdsa321", commandStr);
-            return result;
+            return ConnectLinuxCommandUtils.connectLinux("18.217.25.160", "root", "zxcvfdsa321", commandStr);
         }
         if (serverId == 1) {
             return "Coming Soon!";
         }
         return "Illegal Input!";
-
     }
 }

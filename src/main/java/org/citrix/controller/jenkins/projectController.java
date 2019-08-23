@@ -29,10 +29,11 @@ public class projectController {
     @PostMapping("/all")
     public RespBean getAllProject(@RequestParam("author") String author) {
         List<CICDProject> allProjects = cicdProjectMapper.getCICDProjectByAuthor(author);
-        if (allProjects != null) {
+        log.info("projectList = " + allProjects);
+        if (allProjects != null && allProjects.size() != 0) {
             return RespBean.ok(null, allProjects);
         } else {
-            throw new CICDException(ResultEnum.GET_DATA_ERROR);
+            return RespBean.ok("No project exists!");
         }
     }
 
@@ -44,7 +45,6 @@ public class projectController {
         } else {
             throw new CICDException(ResultEnum.GET_DATA_ERROR);
         }
-
     }
 
     @PostMapping("/delete")
@@ -78,20 +78,22 @@ public class projectController {
                                   @RequestParam("type") int type,
                                   @RequestParam("enable") boolean enable) {
         CICDProject project = cicdProjectMapper.getCICDProjectByName(name);
-        if (type != 0) {
-            project.setType(type);
-        }
-        if (enable !=false) {
-            project.setEnabled(enable);
-        }
-        int result = cicdProjectMapper.updateCICDProject(project);
-        if (result == 1) {
-            return true;
+        if (project != null) {
+            if (type != 0) {
+                project.setType(type);
+            }
+            if (enable !=false) {
+                project.setEnabled(enable);
+            }
+            int result = cicdProjectMapper.updateCICDProject(project);
+            if (result == 1) {
+                return true;
+            } else {
+                throw new CICDException(ResultEnum.UPDATE_DATA_ERROR);
+            }
         } else {
-            throw new CICDException(ResultEnum.UPDATE_DATA_ERROR);
+            throw new CICDException(ResultEnum.GET_DATA_ERROR);
         }
     }
-
-
 
 }

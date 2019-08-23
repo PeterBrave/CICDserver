@@ -79,15 +79,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         RespBean respBean = null;
                         if (e instanceof BadCredentialsException ||
                                 e instanceof UsernameNotFoundException) {
-                            respBean = RespBean.error("账户名或者密码输入错误!");
+                            respBean = RespBean.error("Account name or password is entered incorrectly!");
                         } else if (e instanceof LockedException) {
-                            respBean = RespBean.error("账户被锁定，请联系管理员!");
-                        } else if (e instanceof CredentialsExpiredException) {
-                            respBean = RespBean.error("密码过期，请联系管理员!");
-                        } else if (e instanceof AccountExpiredException) {
-                            respBean = RespBean.error("账户过期，请联系管理员!");
+                            respBean = RespBean.error("The account is locked, please contact the administrator!");
                         } else if (e instanceof DisabledException) {
-                            respBean = RespBean.error("账户被禁用，请联系管理员!");
+                            respBean = RespBean.error("The account is disabled, please contact the administrator!");
                         } else {
                             respBean = RespBean.error("登录失败!");
                         }

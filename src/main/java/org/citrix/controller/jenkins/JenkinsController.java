@@ -1,14 +1,17 @@
 package org.citrix.controller.jenkins;
 
 import com.offbytwo.jenkins.JenkinsServer;
-import com.offbytwo.jenkins.model.*;
+import com.offbytwo.jenkins.model.JobWithDetails;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
 import org.citrix.bean.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.net.URI;
@@ -42,20 +45,16 @@ public class JenkinsController {
 
     @PostMapping("/build")
     public RespBean buildProject(@RequestParam(value = "jobName") String jobName,
-                                 @RequestParam(value = "type") int type) throws IOException{
+                                 @RequestParam(value = "type") int type) throws IOException, URISyntaxException{
         log.info("jobName = " + jobName);
-        try {
-            if (jobName == null) {
-                throw new IllegalArgumentException("jobName is null");
-            }
-            JenkinsServer jenkins = getJenkins(type);
-            if (jenkins != null) {
-                JobWithDetails job = jenkins.getJob(jobName);
-                job.build();
-                return RespBean.ok("Compile Successfully!");
-            }
-        } catch (Exception e) {
-            return RespBean.error("Failed to Compile");
+        if (jobName == null) {
+            throw new IllegalArgumentException("jobName is null");
+        }
+        JenkinsServer jenkins = getJenkins(type);
+        if (jenkins != null) {
+            JobWithDetails job = jenkins.getJob(jobName);
+            job.build();
+            return RespBean.ok("Compile Successfully!");
         }
         return RespBean.error("Failed to Compile");
     }
@@ -65,43 +64,28 @@ public class JenkinsController {
                               @RequestParam(value = "repo") String repo,
                               @RequestParam(value = "githubName") String githubName,
                               @RequestParam(value = "type") int type) throws Exception {
-        log.info("projectName = " + projectName + ", type = " + type + ",repo =" + repo);
+        log.info("projectName = " + projectName + ", type = " + type + ",repo =" + repo + " githubName = " + githubName);
         if (projectName == null || repo == null || githubName == null) {
             throw new IllegalArgumentException("argument is null");
         }
-        try {
-            JenkinsServer jenkins = getJenkins(type);
-            if (jenkins != null) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("repo", repo);
-                map.put("githubName", githubName);
-                Template template = freemarkerConfiguration.getTemplate("jenkins-config.ftl");
-                String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, map);
-                jenkins.createJob(projectName, content);
-                return RespBean.ok("Create Jenkins Job Successfully!");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        JenkinsServer jenkins = getJenkins(type);
+        if (jenkins != null) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("repo", repo);
+            map.put("githubName", githubName);
+            Template template = freemarkerConfiguration.getTemplate("jenkins-config.ftl");
+            String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, map);
+            jenkins.createJob(projectName, content);
+            return RespBean.ok("Create Jenkins Job Successfully!");
         }
         return RespBean.error("Failed to Create Jenkins Job!");
     }
 
-    @PostMapping("/output")
-    public String getConsoleOutput(@RequestParam(value = "projectName") String projectName,
-                                   @RequestParam(value = "type") int type) throws IOException{
-        if (projectName == null) {
-            throw new IllegalArgumentException("projectName is null");
+    public void deleteJob(int type, String jobName) throws IOException, URISyntaxException{
+        JenkinsServer jenkins = getJenkins(type);
+        if (jenkins != null) {
+            jenkins.deleteJob(jobName);
         }
-        try {
-            JenkinsServer jenkins = getJenkins(type);
-            if (jenkins != null) {
-                JobWithDetails job = jenkins.getJob(projectName);
-                return job.getLastBuild().details().getConsoleOutputText();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Failed to Get Building Result!";
-        }
-        return "Failed to Get Building Result!";
     }
 }

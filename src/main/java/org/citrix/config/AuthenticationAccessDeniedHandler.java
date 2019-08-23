@@ -22,7 +22,7 @@ public class AuthenticationAccessDeniedHandler implements AccessDeniedHandler {
         resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
         resp.setContentType("application/json;charset=UTF-8");
         PrintWriter out = resp.getWriter();
-        RespBean error = RespBean.error("权限不足，请联系管理员!");
+        RespBean error = RespBean.error("Do not have enough permission, please contact the administrator!");
         out.write(new ObjectMapper().writeValueAsString(error));
         out.flush();
         out.close();

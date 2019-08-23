@@ -23,10 +23,10 @@ public class HrService implements UserDetailsService {
     private HrMapper hrMapper;
 
     @Override
-    public Hr loadUserByUsername(String s) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         Hr hr = hrMapper.loadUserByUsername(s);
         if (hr == null) {
-            throw new UsernameNotFoundException("用户名不对");
+            throw new UsernameNotFoundException("The username is error!");
         }
         return hr;
     }
@@ -53,4 +53,5 @@ public class HrService implements UserDetailsService {
             throw new CICDException(ResultEnum.UPDATE_DATA_ERROR);
         }
     }
+
 }

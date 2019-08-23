@@ -4,10 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.citrix.bean.Hr;
 import org.citrix.bean.RespBean;
 import org.citrix.common.HrUtils;
-import org.citrix.mapper.HrMapper;
 import org.citrix.service.HrService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 /**

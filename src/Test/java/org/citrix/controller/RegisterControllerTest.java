@@ -1,6 +1,7 @@
 package org.citrix.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.citrix.bean.RespBean;
 import org.citrix.service.HrService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,10 +20,20 @@ import static org.junit.Assert.*;
 public class RegisterControllerTest {
 
     @Autowired
-    private HrService hrService;
+    private RegisterController registerController;
+
     @Test
     public void registerUser() {
-        int result = hrService.hrReg("tester", "123");
-        Assert.assertNotNull(result);
+        RespBean result = registerController.registerUser("tester", "123");
+        int status = result.getStatus();
+        Assert.assertEquals(200, status);
+    }
+
+    @Test
+    public void doubleRegisterUser() {
+        registerController.registerUser("tester", "123");
+        RespBean result =  registerController.registerUser("tester", "123");
+        int status = result.getStatus();
+        Assert.assertEquals(500, status);
     }
 }
