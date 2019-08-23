@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author kavin
@@ -54,12 +56,18 @@ public class GithubController {
         } else {
             if (type == 1 || type == 2) {
                 Template template = freemarkerConfiguration.getTemplate("vm-pipeline-"+language+".ftl");
-                String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, null);
+                Map<String, Object> map = new HashMap<>();
+                map.put("repo", repo);
+                map.put("githubName", githubName);
+                String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, map);
                 return RespBean.ok("Load vm-"+ language + " template successful!", content);
             } else if (type == 3) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("repo", repo);
+                map.put("githubName", githubName);
                 Template template = freemarkerConfiguration.getTemplate("docker-pipeline-"+language+".ftl");
-                String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, null);
-                return RespBean.ok("Load vm-"+ language + " template successful!", content);
+                String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, map);
+                return RespBean.ok("Load docker-"+ language + " template successful!", content);
             }
             return RespBean.error("Load jenkins file error!");
         }
@@ -79,6 +87,7 @@ public class GithubController {
             CloseableHttpClient httpClient = HttpClientBuilder.create().build();
             HttpResponse response = getJenkinsFileContent(uri, finalToken);
             int code = response.getStatusLine().getStatusCode();
+            log.info("=============================code = " + code);
             HttpPut httpPut = new HttpPut(uri);
             //添加http头信息
             httpPut.addHeader("Authorization", finalToken); //认证token
@@ -103,13 +112,14 @@ public class GithubController {
                     return RespBean.error("JenkinsFile Update Failed");
                 }
 
-            } else if (code == 404) {
+            } else if (code == 404 || code == 401) {
                 JSONObject obj = new JSONObject();
                 obj.put("message", "Add Set up file");
                 obj.put("content", s);
                 httpPut.setEntity(new StringEntity(obj.toString()));
                 response = httpClient.execute(httpPut);
                 code = response.getStatusLine().getStatusCode();
+                log.info("code =" + code);
                 if (code == 201 ) {
                     return RespBean.ok("Add JenkinsFile Successfully");
                 } else {

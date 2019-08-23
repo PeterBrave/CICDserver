@@ -2,7 +2,7 @@ node('build_docker_node'){
     stage('Clone'){
     /*拉取代码*/
     checkout ([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [],
-    submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/PeterBrave/CICDserver.git']]])
+    submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/${githubName}/${repo}.git']]])
     }
 
     stage('Build') {

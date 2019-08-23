@@ -18,6 +18,11 @@ public class RegisterController {
 
     @Autowired
     private HrService hrService;
+
+    public void setHrService(HrService hrService) {
+        this.hrService = hrService;
+    }
+
     @PostMapping
     public RespBean registerUser(@RequestParam("username") String username,
                                @RequestParam("password") String password) {

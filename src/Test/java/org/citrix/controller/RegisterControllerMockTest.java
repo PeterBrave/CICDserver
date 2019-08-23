@@ -18,27 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Transactional
 @Rollback
-public class RegisterControllerTest {
+public class RegisterControllerMockTest {
 
     @Autowired
     private RegisterController registerController;
 
     @Test
-    public void registerUser() {
+    public void registerUserMock() {
         HrService mock = EasyMock.createMock(HrService.class);
-        EasyMock.expect(mock.hrReg("test", "tester")).andReturn(1);
-        EasyMock.replay(mock);
-        registerController.setHrService(mock);
-        RespBean respBean = registerController.registerUser("test", "tester");
-        int result = respBean.getStatus();
-        Assert.assertEquals(200, result);
-        EasyMock.verify(mock);
-    }
-
-    @Test
-    public void doubleRegisterUser() {
-        HrService mock = EasyMock.createMock(HrService.class);
-        EasyMock.expect(mock.hrReg("test", "tester")).andReturn(-1);
+        EasyMock.expect(mock.hrReg("test", "tester")).andReturn(-2);
         EasyMock.replay(mock);
         registerController.setHrService(mock);
         RespBean respBean = registerController.registerUser("test", "tester");

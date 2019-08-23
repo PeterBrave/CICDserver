@@ -21,10 +21,14 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/project")
-public class projectController {
+public class ProjectController {
 
     @Autowired
     private CICDProjectMapper cicdProjectMapper;
+
+    public void setCicdProjectMapper(CICDProjectMapper cicdProjectMapper) {
+        this.cicdProjectMapper =cicdProjectMapper;
+    }
 
     @PostMapping("/all")
     public RespBean getAllProject(@RequestParam("author") String author) {
@@ -66,6 +70,7 @@ public class projectController {
         project.setLanguage(language);
         project.setType(type);
         project.setEnabled(false);
+        log.info("dev  = " + project);
         int result = cicdProjectMapper.addCICDProject(project);
         if (result == 1) {
             return true;

@@ -20,6 +20,10 @@ public class UserController {
     @Autowired
     HrService hrService;
 
+    public void setHrService(HrService hrService) {
+        this.hrService = hrService;
+    }
+
     @GetMapping("/info")
     public RespBean getUserInfo() {
         return RespBean.ok("success", HrUtils.getCurrentHr());

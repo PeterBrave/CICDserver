@@ -3,6 +3,9 @@ package org.citrix.controller.jenkins;
 import lombok.extern.slf4j.Slf4j;
 import org.citrix.bean.CICDProject;
 import org.citrix.bean.RespBean;
+import org.citrix.enums.ResultEnum;
+import org.citrix.exception.CICDException;
+import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class projectControllerTest {
 
     @Autowired
-    projectController projectController;
+    private ProjectController projectController;
 
     @Test
     public void addProjectOKTest() {
@@ -90,6 +93,19 @@ public class projectControllerTest {
         RespBean result = projectController.getProjectDetail("testProject");
         CICDProject project = (CICDProject) result.getObj();
         Assert.assertEquals(false, project.isEnabled());
+    }
+
+    @Test
+    public void updateProjectError() {
+        ProjectController mock = EasyMock.createMock(ProjectController.class);
+        EasyMock.expect(mock.updateProject("testProject", 1, false)).andThrow(new CICDException(ResultEnum.UPDATE_DATA_ERROR));
+        EasyMock.replay(mock);
+        try {
+            mock.updateProject("testProject", 1, false);
+        } catch (Exception e) {
+            Assert.assertNotNull(e);
+        }
+        EasyMock.verify(mock);
     }
 
     @Test

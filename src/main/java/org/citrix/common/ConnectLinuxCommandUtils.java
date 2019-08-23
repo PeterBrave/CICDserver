@@ -108,8 +108,7 @@ public class ConnectLinuxCommandUtils {
      */
     public static String connectLinux(String ip,String userName,String password,String commandStr) {
 
-        log.info("ConnectLinuxCommand  scpGet===" + "ip:" + ip + "  userName:" + userName + "  commandStr:"
-                + commandStr);
+        log.info(" scpGet===" + "ip:" + ip + "  userName:" + userName + "  commandStr:" + commandStr);
 
         String returnStr = "";
 

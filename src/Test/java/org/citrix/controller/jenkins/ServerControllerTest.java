@@ -25,4 +25,17 @@ public class ServerControllerTest {
         String result = serverController.runBash(2, "pwd");
         Assert.assertNotNull(result);
     }
+
+    @Test
+    public void runBashServer1() {
+        String result = serverController.runBash(1, "pwd");
+        Assert.assertNotNull(result);
+    }
+
+    @Test
+    public void runBashServer3() {
+        String result = serverController.runBash(3, "pwd");
+        Assert.assertNotNull(result);
+    }
+
 }
