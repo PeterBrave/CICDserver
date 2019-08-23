@@ -6,6 +6,7 @@ import org.citrix.bean.RespBean;
 import org.citrix.mapper.HrMapper;
 import org.citrix.service.HrService;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,12 @@ public class GithubControllerTest {
     @Autowired
     private HrMapper hrMapper;
 
-    private String githubToken = hrMapper.getHrById(new Long(14)).getGithubToken();
+    private String githubToken;
+
+    @Before
+    public void setGithubToken() {
+        this.githubToken = hrMapper.getHrById(new Long(14)).getGithubToken();
+    }
 
     @Test
     public void getContentCase1() throws IOException, TemplateException {
