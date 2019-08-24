@@ -27,19 +27,6 @@ public class ConnectLinuxCommandUtilsTest {
     }
 
     @Test
-    public void loginErrorTest() {
-        try {
-        RemoteConnect remoteConnect = new RemoteConnect();
-        remoteConnect.setIp("18.217.255.160");
-        remoteConnect.setUserName("root");
-        remoteConnect.setPassword("123");
-        ConnectLinuxCommandUtils.login(remoteConnect);
-        }catch (Exception e) {
-            Assert.assertNotNull(e);
-        }
-    }
-
-    @Test
     public void execute() {
         RemoteConnect remoteConnect = new RemoteConnect();
         remoteConnect.setIp("18.217.25.160");

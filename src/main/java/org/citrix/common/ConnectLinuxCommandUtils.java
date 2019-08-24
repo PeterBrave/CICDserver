@@ -6,6 +6,7 @@ import ch.ethz.ssh2.StreamGobbler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.citrix.bean.RemoteConnect;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 
@@ -14,10 +15,15 @@ import java.io.*;
  * @date 2019-07-18 09:54
  */
 @Slf4j
+@Service
 public class ConnectLinuxCommandUtils {
 
     private static String DEFAULTCHARTSET = "UTF-8";
     private static Connection conn;
+
+    public void setConnection(Connection conn) {
+        this.conn = conn;
+    }
 
     /**
      *

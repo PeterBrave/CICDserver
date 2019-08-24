@@ -74,7 +74,6 @@ public class JenkinsControllerTest {
         try {
             jenkinsController.createJob(null, "CICDserver", "PeterBrave", 2);
         } catch (Exception e) {
-            e.printStackTrace();
             Assert.assertNotNull(e);
         }
     }
@@ -84,7 +83,6 @@ public class JenkinsControllerTest {
         try {
             jenkinsController.createJob(null, null, null, 2);
         } catch (Exception e) {
-            e.printStackTrace();
             Assert.assertNotNull(e);
         }
     }
