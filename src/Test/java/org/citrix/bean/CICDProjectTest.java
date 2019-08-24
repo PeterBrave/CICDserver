@@ -12,6 +12,8 @@ public class CICDProjectTest {
     public void getId() {
         CICDProject project = new CICDProject();
         project.setId(new Long(100));
+        project.setName("job");
+        project.getName();
         project.getId();
         project.setAuthor("tester");
         project.getAuthor();
