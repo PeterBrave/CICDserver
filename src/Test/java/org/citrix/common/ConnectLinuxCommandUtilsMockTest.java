@@ -38,7 +38,6 @@ public class ConnectLinuxCommandUtilsMockTest {
         }
     }
 
-    //TODO:写这个的单元测试
     @Test
     public void executeException() throws IOException{
         Connection mock = EasyMock.createMock(Connection.class);
@@ -51,5 +50,10 @@ public class ConnectLinuxCommandUtilsMockTest {
         } catch (Exception e) {
             Assert.assertNotNull(e);
         }
+    }
+
+    @Test
+    public void connectLinuxMock() {
+
     }
 }

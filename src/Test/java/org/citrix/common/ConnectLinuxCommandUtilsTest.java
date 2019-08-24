@@ -39,11 +39,14 @@ public class ConnectLinuxCommandUtilsTest {
         log.info(result);
     }
 
-    @Test
-    public void processStdout() {
-    }
 
     @Test
     public void connectLinux() {
+        try {
+            ConnectLinuxCommandUtils.connectLinux("18.217.25.160", "root", "zxcvfdsa321", "#!/bin/bash\n" +
+                    "echo \"My First Script!");
+        } catch (Exception e) {
+            Assert.assertNotNull(e);
+        }
     }
 }
