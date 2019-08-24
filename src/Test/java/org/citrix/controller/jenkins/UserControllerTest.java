@@ -3,6 +3,9 @@ package org.citrix.controller.jenkins;
 import lombok.extern.slf4j.Slf4j;
 import org.citrix.bean.Hr;
 import org.citrix.bean.RespBean;
+import org.citrix.common.HrUtils;
+import org.citrix.service.HrService;
+import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,6 +57,12 @@ public class UserControllerTest {
     @WithUserDetails(value = "admin", userDetailsServiceBeanName = "hrService")
     @Test
     public void modifyUserInfo() {
+
+        HrService mock = EasyMock.createMock(HrService.class);
+        EasyMock.expect(mock.updateHr(EasyMock.anyObject())).andReturn(1);
+        EasyMock.replay(mock);
+        userController.setHrService(mock);
+
         RespBean respBean = userController.getUserInfo();
         Hr hr = (Hr)respBean.getObj();
         RespBean respBean1 = userController.modifyUserInfo(hr.getName(), hr.getGithubName(), hr.getGithubToken(), hr.getEmail(), hr.getAddress(),hr.getPhone(),hr.getUserface());
@@ -63,15 +72,11 @@ public class UserControllerTest {
     @WithUserDetails(value = "admin", userDetailsServiceBeanName = "hrService")
     @Test
     public void modifyUserInfoError1() {
-        RespBean respBean = userController.getUserInfo();
-        Hr hr = (Hr)respBean.getObj();
-        RespBean respBean1 = userController.modifyUserInfo(hr.getName(), hr.getGithubName(), hr.getGithubToken(), hr.getEmail(), hr.getAddress(),hr.getPhone(),hr.getUserface());
-        Assert.assertNotNull(respBean1);
-    }
+        HrService mock = EasyMock.createMock(HrService.class);
+        EasyMock.expect(mock.updateHr(EasyMock.anyObject())).andReturn(0);
+        EasyMock.replay(mock);
+        userController.setHrService(mock);
 
-    @WithUserDetails(value = "admin", userDetailsServiceBeanName = "hrService")
-    @Test
-    public void modifyUserInfoError2() {
         RespBean respBean = userController.getUserInfo();
         Hr hr = (Hr)respBean.getObj();
         RespBean respBean1 = userController.modifyUserInfo(hr.getName(), hr.getGithubName(), hr.getGithubToken(), hr.getEmail(), hr.getAddress(),hr.getPhone(),hr.getUserface());

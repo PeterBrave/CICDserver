@@ -20,6 +20,10 @@ public class MenuService {
     @Autowired
     MenuMapper menuMapper;
 
+    public void setMenuMapper(MenuMapper menuMapper) {
+        this.menuMapper = menuMapper;
+    }
+
 //    @Cacheable(key = "#root.methodName")
     public List<Menu> getAllMenu(){
         return menuMapper.getAllMenu();

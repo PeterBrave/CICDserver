@@ -3,6 +3,7 @@ package org.citrix.service;
 import lombok.extern.slf4j.Slf4j;
 import org.citrix.bean.Hr;
 import org.citrix.bean.RespBean;
+import org.citrix.common.HrUtils;
 import org.citrix.controller.jenkins.UserController;
 import org.citrix.mapper.HrMapper;
 import org.easymock.EasyMock;
@@ -45,13 +46,14 @@ public class HrServiceTest {
         }
     }
 
-    @WithUserDetails(value = "admin", userDetailsServiceBeanName = "hrService")
     @Test
     public void updateHr() {
+        HrMapper mock = EasyMock.createMock(HrMapper.class);
+        Hr hr = new Hr();
+        EasyMock.expect(mock.updateHr(hr)).andReturn(0);
+        EasyMock.replay(mock);
+        hrService.setHrMapper(mock);
         try {
-            RespBean respBean = userController.getUserInfo();
-            Hr hr = (Hr) respBean.getObj();
-            hr.setId(new Long(1));
             hrService.updateHr(hr);
         }catch (Exception e){
             Assert.assertNotNull(e);
