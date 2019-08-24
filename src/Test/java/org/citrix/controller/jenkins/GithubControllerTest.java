@@ -2,9 +2,19 @@ package org.citrix.controller.jenkins;
 
 import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSONObject;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
 import org.citrix.bean.RespBean;
 import org.citrix.mapper.HrMapper;
 import org.citrix.service.HrService;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -78,4 +88,5 @@ public class GithubControllerTest {
         RespBean result = githubController.commitFile("this is for test", "lmb", "PeterBrave", githubToken);
         Assert.assertNotNull(result);
     }
+
 }

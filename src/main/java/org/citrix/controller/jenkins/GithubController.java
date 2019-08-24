@@ -129,7 +129,7 @@ public class GithubController {
             return RespBean.error("Failed to Modify File");
     }
 
-    private HttpResponse getJenkinsFileContent(String uri, String token) throws IOException{
+    public HttpResponse getJenkinsFileContent(String uri, String token) throws IOException{
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet httpGet = new HttpGet(uri);
         httpGet.addHeader("Authorization", token);
@@ -139,14 +139,14 @@ public class GithubController {
         return response;
     }
 
-    private String string2Base64(String s) {
+    public String string2Base64(String s) {
         byte[] b = s.getBytes();
         Base64 base64 = new Base64();
         b = base64.encode(b);
         return new String(b);
     }
 
-    private String base642String(String s) {
+    public String base642String(String s) {
         Base64 base64 = new Base64();
         byte[] b = base64.decode(s);
         String content = new String(b);
@@ -154,7 +154,7 @@ public class GithubController {
     }
 
     //拼接Base64Token
-    private String getFinalToken(String githubName, String githubToken) {
+    public String getFinalToken(String githubName, String githubToken) {
         String rawToken = githubName + ":" + githubToken;
         String middleToken = string2Base64(rawToken);
         String finalToken = "Basic " + middleToken;
