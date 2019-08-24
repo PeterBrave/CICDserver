@@ -11,6 +11,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
+import org.citrix.HttpDeleteWithBody;
 import org.citrix.bean.RespBean;
 import org.citrix.mapper.HrMapper;
 import org.citrix.service.HrService;
@@ -71,10 +72,6 @@ public class GithubControllerTest {
         Assert.assertNotNull(respBean);
     }
 
-
-
-
-
     @Test
     public void commitFile() throws IOException, TemplateException{
         RespBean respBean = githubController.getContent("CICDserver", "Java", "PeterBrave", githubToken,2);
@@ -87,6 +84,29 @@ public class GithubControllerTest {
     public void commitFileError() throws IOException{
         RespBean result = githubController.commitFile("this is for test", "lmb", "PeterBrave", githubToken);
         Assert.assertNotNull(result);
+    }
+
+    @Before
+    public void deleteGithubFile() throws IOException {
+        log.info("githubToken ====" + githubToken);
+        String finalToken = githubController.getFinalToken("PeterBrave", githubToken);
+        log.info("finalToken = ===== " + finalToken);
+        String uri = "https://api.github.com/repos/PeterBrave/lmb/contents/Jenkinsfile";
+        HttpResponse original_response = githubController.getJenkinsFileContent(uri, finalToken);
+        String rev = EntityUtils.toString(original_response.getEntity());
+        com.alibaba.fastjson.JSONObject jsonObject = com.alibaba.fastjson.JSONObject.parseObject(rev);
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        HttpDeleteWithBody httpDelete = new HttpDeleteWithBody(uri);
+        httpDelete.addHeader("Authorization", finalToken); //认证token
+        httpDelete.addHeader("Content-Type", "application/json");
+
+        JSONObject obj = new JSONObject();
+        obj.put("message", "delete jenkinsfile");
+        obj.put("sha", jsonObject.getString("sha"));
+        obj.put("branch", "master");
+        httpDelete.setEntity(new StringEntity(obj.toString()));
+        HttpResponse response = httpClient.execute(httpDelete);
+        log.info("response-----------------+++++++++" + response.toString());
     }
 
 }
