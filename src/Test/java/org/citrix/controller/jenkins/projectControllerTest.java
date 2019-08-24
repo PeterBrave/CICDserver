@@ -35,6 +35,7 @@ public class projectControllerTest {
         projectController.setCicdProjectMapper(mock);
         Boolean result = projectController.addProject("testProject", "tester", "Java", 0);
         Assert.assertEquals(true, result);
+        EasyMock.verify(mock);
     }
 
     @Test
@@ -48,6 +49,7 @@ public class projectControllerTest {
         projectController.setCicdProjectMapper(mock);
         RespBean result = projectController.getAllProject("tester");
         Assert.assertNotNull(result);
+        EasyMock.verify(mock);
     }
 
     @Test
@@ -59,6 +61,7 @@ public class projectControllerTest {
         projectController.setCicdProjectMapper(mock);
         RespBean result = projectController.getAllProject("tester");
         Assert.assertNotNull(result);
+        EasyMock.verify(mock);
     }
 
     @Test
@@ -72,6 +75,7 @@ public class projectControllerTest {
         } catch (Exception e) {
             Assert.assertNotNull(e);
         }
+        EasyMock.verify(mock);
     }
 
     @Test
@@ -86,6 +90,7 @@ public class projectControllerTest {
         boolean result = projectController.updateProject("tester", 1, true);
 
         Assert.assertEquals(true, result);
+        EasyMock.verify(mock);
     }
 
     @Test
@@ -99,6 +104,7 @@ public class projectControllerTest {
         } catch (Exception e) {
             Assert.assertNotNull(e);
         }
+        EasyMock.verify(mock);
     }
 
     @Test
@@ -113,6 +119,7 @@ public class projectControllerTest {
         boolean result = projectController.updateProject("tester", 0, true);
 
         Assert.assertEquals(true, result);
+        EasyMock.verify(mock);
     }
 
     @Test
@@ -127,6 +134,7 @@ public class projectControllerTest {
         boolean result = projectController.updateProject("tester", 1, false);
 
         Assert.assertEquals(true, result);
+        EasyMock.verify(mock);
     }
 
     @Test
@@ -142,7 +150,7 @@ public class projectControllerTest {
         } catch (Exception e) {
             Assert.assertNotNull(e);
         }
-
+        EasyMock.verify(mock);
     }
 
     @Test
@@ -155,7 +163,7 @@ public class projectControllerTest {
         boolean result = projectController.deleteProject("tester");
 
         Assert.assertEquals(true, result);
-
+        EasyMock.verify(mock);
     }
 
     @Test
@@ -170,8 +178,7 @@ public class projectControllerTest {
         } catch (Exception e) {
             Assert.assertNotNull(e);
         }
+        EasyMock.verify(mock);
     }
-
-
 
 }

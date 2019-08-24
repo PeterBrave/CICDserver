@@ -1,7 +1,5 @@
 package org.citrix.bean;
 
-import lombok.Data;
-
 import java.util.Date;
 
 /**

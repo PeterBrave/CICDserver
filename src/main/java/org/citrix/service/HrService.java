@@ -22,6 +22,10 @@ public class HrService implements UserDetailsService {
     @Autowired
     private HrMapper hrMapper;
 
+    public void setHrMapper(HrMapper hrMapper) {
+        this.hrMapper = hrMapper;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         Hr hr = hrMapper.loadUserByUsername(s);
