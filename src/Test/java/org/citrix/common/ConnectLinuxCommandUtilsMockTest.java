@@ -28,7 +28,6 @@ public class ConnectLinuxCommandUtilsMockTest {
         EasyMock.expect(mock.authenticateWithPassword("root", "123")).andThrow(new IOException());
         EasyMock.replay(mock);
         connectLinuxCommandUtils.setConnection(mock);
-
         try {
             RemoteConnect remoteConnect = new RemoteConnect();
             remoteConnect.setUserName("root");
@@ -37,6 +36,20 @@ public class ConnectLinuxCommandUtilsMockTest {
         } catch (Exception e) {
             Assert.assertNotNull(e);
         }
+    }
 
+    //TODO:写这个的单元测试
+    @Test
+    public void executeException() throws IOException{
+        Connection mock = EasyMock.createMock(Connection.class);
+        EasyMock.expect(mock.openSession()).andThrow(new IOException());
+        EasyMock.replay(mock);
+        connectLinuxCommandUtils.setConnection(mock);
+
+        try{
+            connectLinuxCommandUtils.execute("pwd");
+        } catch (Exception e) {
+            Assert.assertNotNull(e);
+        }
     }
 }
