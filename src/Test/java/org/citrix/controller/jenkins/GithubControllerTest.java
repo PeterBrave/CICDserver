@@ -15,10 +15,7 @@ import org.citrix.HttpDeleteWithBody;
 import org.citrix.bean.RespBean;
 import org.citrix.mapper.HrMapper;
 import org.citrix.service.HrService;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,7 +40,7 @@ public class GithubControllerTest {
 
     private String githubToken;
 
-    @Before
+    @BeforeClass
     public void setGithubToken() {
         this.githubToken = hrMapper.getHrById(new Long(14)).getGithubToken();
     }
@@ -86,7 +83,7 @@ public class GithubControllerTest {
         Assert.assertNotNull(result);
     }
 
-    @Before
+    @AfterClass
     public void deleteGithubFile() throws IOException {
         log.info("githubToken ====" + githubToken);
         String finalToken = githubController.getFinalToken("PeterBrave", githubToken);
