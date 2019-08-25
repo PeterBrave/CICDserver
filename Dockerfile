@@ -8,7 +8,7 @@ RUN yum update -y \
 && mkdir /usr/share/tomcat 
 #&& /usr/share/tomcat/apache-tomcat-8.5.43/bin/catalina.sh start
 
-COPY /target/*.war /usr/share/tomcat/
+COPY /target/*.jar /usr/share/tomcat/
 #RUN /usr/share/tomcat/apache-tomcat-8.5.43/bin/startup.sh \ 
 #&& /usr/share/tomcat/apache-tomcat-8.5.43/bin/shutdown.sh
 
