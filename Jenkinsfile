@@ -46,6 +46,9 @@ node('build_node'){
         Dockerhub_ACCESS_KEY_ID     = credentials('dockerhub-secret-id')
         }
         /*????*/
+        sh 'rm -rf Dockerfile'
+        sh ' echo "FROM centos \n RUN yum update -y  && yum install -y wget && yum install -y java && mkdir /usr/share/tomcat \n COPY /target/*.jar /usr/share/tomcat/ \n ENTRYPOINT java -jar /usr/share/tomcat/cicd-0.0.1-Beta.jar" > Dockerfile'
+            
         sh 'docker build -t cicd_test_docker .'
         /*????*/
         sh 'docker tag cicd_test_docker zxpwin/cicd_test_docker'
@@ -62,6 +65,6 @@ node('build_node'){
     stage('Deploy'){
     echo 'Deploy'
     sh 'docker pull zxpwin/cicd_test_docker'
-    sh 'docker run --privileged=true -itd -p 8080:8080 zxpwin/cicd_test_docker:latest /usr/sbin/init'
+    sh 'docker run --privileged=true -itd -p 8082:8082 zxpwin/cicd_test_docker:latest /usr/sbin/init'
     }
 }
