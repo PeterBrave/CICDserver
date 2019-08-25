@@ -17,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Slf4j
-@Transactional
-@Rollback
 public class UserControllerMockTest {
 
     @Autowired

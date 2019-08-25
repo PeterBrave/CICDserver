@@ -30,8 +30,6 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Slf4j
-@Transactional
-@Rollback
 public class UserControllerTest {
 
     private MockMvc mockMvc;

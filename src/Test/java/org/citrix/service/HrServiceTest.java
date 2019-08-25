@@ -2,9 +2,6 @@ package org.citrix.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.citrix.bean.Hr;
-import org.citrix.bean.RespBean;
-import org.citrix.common.HrUtils;
-import org.citrix.controller.jenkins.UserController;
 import org.citrix.mapper.HrMapper;
 import org.easymock.EasyMock;
 import org.junit.Assert;
@@ -12,7 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Rollback
 public class HrServiceTest {
-    @Autowired
-    private UserController userController;
 
     @Autowired
     private HrService hrService;

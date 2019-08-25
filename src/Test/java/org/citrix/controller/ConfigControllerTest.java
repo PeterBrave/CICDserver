@@ -19,7 +19,6 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Slf4j
-@Transactional
 public class ConfigControllerTest {
 
     @Autowired
