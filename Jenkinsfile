@@ -1,4 +1,4 @@
-node('build_docker_node'){
+node('build_node'){
     stage('Clone'){
     /*????*/
     checkout ([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [],
@@ -39,7 +39,7 @@ node('build_docker_node'){
     }
 }
 
-    node('build_docker_node'){
+    node('build_node'){
         stage('Build Docker'){
         echo 'build docker'
         environment {
