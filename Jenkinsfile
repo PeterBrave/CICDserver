@@ -1,4 +1,4 @@
-node('build_docker_node'){
+node('build_node'){
     stage('Clone'){
         checkout ([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [],
         submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/PeterBrave/CICDserver.git']]])
@@ -32,7 +32,7 @@ node('build_docker_node'){
     }
 }
 
-node('build_docker_node'){
+node('build_node'){
     stage('Build Docker'){
         echo 'build docker'
         environment {
