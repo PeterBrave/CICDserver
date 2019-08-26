@@ -44,7 +44,7 @@ node('build_docker_node'){
         sh 'docker tag cicd_test_docker zxpwin/cicd_test_docker'
         withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
             sh "docker login -u $dockerHubUser -p $dockerHubPassword"
-            sh "docker push "zxpwin/cicd_test_docker"
+            sh "docker push zxpwin/cicd_test_docker"
         }
     }
 }
