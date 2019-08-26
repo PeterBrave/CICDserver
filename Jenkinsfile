@@ -32,7 +32,7 @@ node('build_node'){
     }
 }
 
-node('build_docker_node'){
+node('build_node'){
     stage('Build Docker'){
         echo 'build docker'
         environment {
