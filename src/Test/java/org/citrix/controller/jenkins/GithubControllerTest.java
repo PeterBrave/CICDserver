@@ -71,9 +71,9 @@ public class GithubControllerTest {
 
     @Test
     public void commitFile() throws IOException, TemplateException{
-        RespBean respBean = githubController.getContent("CICDserver", "Java", "PeterBrave", githubToken,2);
+        RespBean respBean = githubController.getContent("SwordOffer", "Java", "PeterBrave", githubToken,2);
         String codeContent = (String)respBean.getObj();
-        RespBean result = githubController.commitFile(codeContent, "CICDserver", "PeterBrave", githubToken);
+        RespBean result = githubController.commitFile(codeContent, "SwordOffer", "PeterBrave", githubToken);
         Assert.assertNotNull(result);
     }
 
