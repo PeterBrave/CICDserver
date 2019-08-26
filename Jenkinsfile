@@ -53,6 +53,6 @@ node('deploy_node'){
     stage('Deploy'){
         echo 'Deploy'
         sh 'docker pull zxpwin/cicd_test_docker'
-        sh 'docker run --privileged=true -itd -p 8082:8083 zxpwin/cicd_test_docker:latest /usr/sbin/init'
+        sh 'docker run --privileged=true -itd -p 8082:8082 zxpwin/cicd_test_docker:latest /usr/sbin/init'
     }
 }
