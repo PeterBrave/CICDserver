@@ -47,13 +47,13 @@ public class GithubControllerTest {
 
     @Test
     public void getContentCase1() throws IOException, TemplateException {
-        RespBean respBean = githubController.getContent("SwordOffer", "Java", "PeterBrave", githubToken,2);
+        RespBean respBean = githubController.getContent("mall", "Java", "PeterBrave", githubToken,2);
         Assert.assertNotNull(respBean);
     }
 
     @Test
     public void getContentCase2() throws IOException, TemplateException {
-        RespBean respBean = githubController.getContent("SwordOffer", "Java", "PeterBrave", githubToken,3);
+        RespBean respBean = githubController.getContent("mall", "Java", "PeterBrave", githubToken,3);
         Assert.assertNotNull(respBean);
     }
 
