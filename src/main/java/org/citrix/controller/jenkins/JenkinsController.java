@@ -34,9 +34,9 @@ public class JenkinsController {
 
     private JenkinsServer getJenkins(int type) throws URISyntaxException{
         if (type == 1 || type == 2) {
-            jenkins = new JenkinsServer(new URI("http://3.15.149.72:8080"), "admin123", "zxcvfdsa321");
+            jenkins = new JenkinsServer(new URI("http://13.124.100.245:8080/"), "citrix", "zxcvfdsa321");
         }else if (type == 3) {
-            jenkins = new JenkinsServer(new URI("http://13.125.214.112:30002/"), "citrix", "zxcvfdsa321");
+            jenkins = new JenkinsServer(new URI("http://13.125.150.242:30002"), "citrix", "zxcvfdsa321");
         }
         return jenkins;
     }
