@@ -11,9 +11,9 @@ def deploy_project_name = "cicd-service"
 podTemplate(
     containers: [containerTemplate(name: 'environment', image: 'docker', ttyEnabled: true, command: 'cat')],
     volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
-    serviceAccount: 'jenkins2',
+    //serviceAccount: 'jenkins2',
     namespace: 'kube-jenkins',
-    //nodeSelector: "ip-172-26-4-129.ap-northeast-2.compute.internal"
+    nodeSelector: "ip-172-26-4-129.ap-northeast-2.compute.internal"
 ){
     node(POD_LABEL) {
         container('environment') {
