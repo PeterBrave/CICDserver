@@ -12,7 +12,7 @@ podTemplate(
     volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
     // serviceAccount: 'jenkins2',
     namespace: 'kube-jenkins',
-    nodeSelector: "ip-172-26-14-103.ap-northeast-2.compute.internal"
+    nodeSelector: "ip-172-26-4-129.ap-northeast-2.compute.internal"
 ){
     node(POD_LABEL) {
         container('environment') {
@@ -39,7 +39,7 @@ podTemplate(
     //volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
     volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/root/data/')],
     namespace: 'kube-jenkins',
-    nodeSelector: "ip-172-26-14-103.ap-northeast-2.compute.internal"
+    nodeSelector: "ip-172-26-4-129.ap-northeast-2.compute.internal"
 ){
     node(POD_LABEL) {
         container('maven') {
@@ -66,7 +66,7 @@ podTemplate(
     volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/root/data'),
     hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
     namespace: 'kube-jenkins',
-    nodeSelector: "ip-172-26-14-103.ap-northeast-2.compute.internal"
+    nodeSelector: "ip-172-26-4-129.ap-northeast-2.compute.internal"
 ){
     node(POD_LABEL) {
         container("sonarscanner"){
@@ -97,7 +97,7 @@ podTemplate(
     volumes: [hostPathVolume(hostPath: '/root/data/', mountPath: '/root/data'),
     hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
     namespace: 'kube-jenkins',
-    nodeSelector: "ip-172-26-14-103.ap-northeast-2.compute.internal"
+    nodeSelector: "ip-172-26-4-129.ap-northeast-2.compute.internal"
 ){
     node(POD_LABEL) {
         container("deploy"){
