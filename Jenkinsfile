@@ -124,7 +124,7 @@ podTemplate(
                 sh "kubectl create deployment $deploy_project_name --image=$tag_deploy_docker_name"
                 //Deploymet yaml file,
                 //IP: 13.125.180.242,  52.79.36.119,   13.125.150.242 :[nodePort]
-                sh 'echo " apiVersion: v1 \n kind: Service \n metadata: \n   name: cicd-service \n   namespace: kube-jenkins \n   labels: \n     app: cicd-service-30007 \n spec: \n   selector: \n     app: cicd-service-30007 \n   type: NodePort \n   ports: \n   - name: web \n     port: 8082 \n     nodePort: 30007" > k8s.yaml'
+                sh 'echo " apiVersion: v1 \n kind: Service \n metadata: \n   name: cicd-service-30007 \n   namespace: kube-jenkins \n   labels: \n     app: cicd-service-30007 \n spec: \n   selector: \n     app: cicd-service-30007 \n   type: NodePort \n   ports: \n   - name: web \n     port: 8082 \n     nodePort: 30007" > k8s.yaml'
                 sh "kubectl create -f k8s.yaml"
             }
         }
