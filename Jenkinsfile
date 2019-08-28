@@ -118,8 +118,8 @@ podTemplate(
             }
             stage('Deploy'){
                 /*Delete the originally deployed project*/
-                sh "kubectl delete service/$deploy_project_name -n kube-jenkins"
-                sh "kubectl delete deployment.apps/$deploy_project_name -n kube-jenkins"
+                //sh "kubectl delete service/$deploy_project_name -n kube-jenkins"
+                //sh "kubectl delete deployment.apps/$deploy_project_name -n kube-jenkins"
                 /*Redeployed project*/
                 sh "kubectl create deployment $deploy_project_name --image=$tag_deploy_docker_name"
                 //Deploymet yaml file,
