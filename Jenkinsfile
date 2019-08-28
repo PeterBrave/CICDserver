@@ -8,32 +8,7 @@ def tag_deploy_docker_name = "zxpwin/cicd-test-docker"     // The tag of  deploy
 def deploy_project_name = "cicd-service"
 
 /*Setup the environment of the slave*/
-podTemplate(
-    containers: [containerTemplate(name: 'environment', image: 'docker', ttyEnabled: true, command: 'cat')],
-    volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
-    // serviceAccount: 'jenkins2',
-    namespace: 'kube-jenkins',
-    nodeSelector: "ip-172-26-4-129.ap-northeast-2.compute.internal"
-){
-    node(POD_LABEL) {
-        container('environment') {
-            stage("Environment setup"){
-                /*Dockerfile*/
-                sh 'echo "FROM centos \n RUN yum update -y && yum install -y java && yum install -y maven && curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.14.0/bin/linux/amd64/kubectl && chmod +x kubectl && mv kubectl /usr/local/bin/kubectl && yum install wget -y && wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo && yum -y install docker-ce-18.06.1.ce-3.el7 && yum install -y unzip && mkdir /home/sonarqube/ && wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip && unzip -o sonar-scanner-cli-4.0.0.1744-linux.zip -d /home/sonarqube/" > Dockerfile'
-                /*Build docker*/
-                sh "docker build -t $environment_docker_name ."
-                /*Tag image*/
-                sh "docker tag $environment_docker_name $tag_environment_docker_name"
-                /*Login the docker hub and push image to the hub*/
-                withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-                    sh "docker login -u $dockerHubUser -p $dockerHubPassword"
-                    sh "docker push $tag_environment_docker_name"
-                }
-                sh "rm -rf Dockerfile"
-            }
-        }
-    }
-}
+
 
 podTemplate(
     containers: [containerTemplate(name: 'maven', image: "$tag_environment_docker_name", ttyEnabled: true, command: 'cat')],
