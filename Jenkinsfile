@@ -1,3 +1,4 @@
+//trigger test
 /*--------------Perform different tasks by three pods------------------*/
 /*Setting variables*/
 def environment_docker_name = 'environment-image'            // The name of slave image
