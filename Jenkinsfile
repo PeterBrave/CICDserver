@@ -1,10 +1,11 @@
+//trigger test
 /*--------------Perform different tasks by three pods------------------*/
 /*Setting variables*/
 def environment_docker_name = 'environment-image'            // The name of slave image
 def tag_environment_docker_name = "zxpwin/environment-image" //The tag of slave image, zxpwin stands for the name of docker hub
 def deploy_docker_name = "cicd-test-docker"                  // The name of deployment image
 def tag_deploy_docker_name = "zxpwin/cicd-test-docker"     // The tag of  deployment image
-def deploy_project_name = "cicd-service-30007"
+def deploy_project_name = "cicd-service"
 
 /*Setup the environment of the slave*/
 podTemplate(
@@ -118,13 +119,13 @@ podTemplate(
             }
             stage('Deploy'){
                 /*Delete the originally deployed project*/
-                //sh "kubectl delete service/$deploy_project_name -n kube-jenkins"
-                //sh "kubectl delete deployment.apps/$deploy_project_name -n kube-jenkins"
+                sh "kubectl delete service/$deploy_project_name -n kube-jenkins"
+                sh "kubectl delete deployment.apps/$deploy_project_name -n kube-jenkins"
                 /*Redeployed project*/
                 sh "kubectl create deployment $deploy_project_name --image=$tag_deploy_docker_name"
                 //Deploymet yaml file,
-                //IP: 13.125.180.242,  52.79.36.119,   13.125.150.242 :[nodePort]
-                sh 'echo " apiVersion: v1 \n kind: Service \n metadata: \n   name: cicd-service-30007 \n   namespace: kube-jenkins \n   labels: \n     app: cicd-service-30007 \n spec: \n   selector: \n     app: cicd-service-30007 \n   type: NodePort \n   ports: \n   - name: web \n     port: 8082 \n     nodePort: 30007" > k8s.yaml'
+                //IP: 13.125.180.242,  52.79.36.119,   13.125.214.112 :[nodePort]
+                sh 'echo " apiVersion: v1 \n kind: Service \n metadata: \n   name: cicd-service \n   namespace: kube-jenkins \n   labels: \n     app: cicd-service \n spec: \n   selector: \n     app: cicd-service \n   type: NodePort \n   ports: \n   - name: web \n     port: 8082 \n     nodePort: 30004" > k8s.yaml'
                 sh "kubectl create -f k8s.yaml"
             }
         }
